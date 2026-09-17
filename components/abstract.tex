@@ -1,0 +1,8 @@
+Graph signal recovery commonly relies on graph Laplacian regularization (GLR) to promote smoothness over a given graph.
+In practice, however, the available graph is often only an imperfect proxy for the underlying graph-smoothness structure, and inaccuracies in its topology or edge weights can substantially distort the regularization.
+We characterize their effects through two failure modes: excessive penalties caused by spurious edges or overestimated weights, and information loss caused by missing edges or underestimated weights.
+Focusing on the former, we propose an infimal-convolution-based magnitude-adaptive regularizer that limits the influence of excessively large proxy-weighted edge differences without identifying or correcting inaccurate graph relations.
+The proposed regularizer evaluates ordinary proxy-weighted edge differences quadratically in a GLR-like manner, while changing the excessive portions of large differences to linear growth according to their magnitudes.
+We formulate graph signal recovery with this regularizer as a constrained convex optimization problem and derive an efficient solver based on preconditioned primal-dual splitting.
+Synthetic experiments under excessive-penalty and mixed proxy-graph inaccuracies show that the proposed method mitigates performance degradation when excessive penalties arise and retains its benefit when both types of failure modes coexist.
+Experiments on real-world meteorological signals further demonstrate its practical effectiveness when recovery relies on spatial proxy graphs that may naturally mismatch the underlying signal structure.

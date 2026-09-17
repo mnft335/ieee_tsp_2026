@@ -1,0 +1,91 @@
+\subsection{Notations and Mathematical Tools}
+
+Vectors are denoted by bold lowercase letters, with the $i$-th element of a vector $\mathbf{x}$ denoted by $x_i$.
+Matrices are denoted by bold uppercase letters, and the transpose of a matrix $\mathbf{X}$ is denoted by $\mathbf{X}^{\top}$.
+The set of all proper lower semicontinuous convex functions from $\mathbb{R}^{m}$ to $(-\infty,+\infty]$ is denoted by $\Gamma_{0}(\mathbb{R}^{m})$.
+For a vector $\mathbf{x}\in\mathbb{R}^{m}$ and $p\geq 1$, the $\ell_p$-norm is defined as $\|\mathbf{x}\|_{p}=(\sum_i |x_i|^{p})^{1/p}$.
+For a matrix $\mathbf{A}\in\mathbb{R}^{n\times m}$, its operator norm is defined as $\|\mathbf{A}\|_{\mathrm{op}}=\sup_{\mathbf{x}\neq\mathbf{0}}\|\mathbf{A}\mathbf{x}\|_2/\|\mathbf{x}\|_2$.
+The indicator function $\iota_C\in\Gamma_{0}(\mathbb{R}^{m})$ of a nonempty closed convex set $C\subset\mathbb{R}^{m}$ is defined as $\iota_C(\mathbf{x})=0$ if $\mathbf{x}\in C$ and $+\infty$ otherwise.
+For a function $f\in\Gamma_{0}(\mathbb{R}^{m})$ and a parameter $\gamma>0$, its proximity operator $\operatorname{prox}_{\gamma f}:\mathbb{R}^{m}\to\mathbb{R}^{m}$ is defined as
+\begin{equation}
+\operatorname{prox}_{\gamma f}(\mathbf{x})
+=
+\operatorname*{argmin}_{\mathbf{y}\in\mathbb{R}^{m}}
+\left\{
+f(\mathbf{y})
++
+\frac{1}{2\gamma}\|\mathbf{y}-\mathbf{x}\|_2^2
+\right\}.
+\end{equation}
+We call a function proximable if its proximity operator has a closed-form expression or can be efficiently computed.
+
+For two   functions $f,g:\mathbb{R}^{d}\to(-\infty,+\infty]$, their infimal convolution \cite{bauschke2017convex} is defined as
+\begin{equation}
+(f\Box g)(\mathbf{u})
+=
+\inf_{\mathbf{u}=\mathbf{p}+\mathbf{q}}
+\left\{
+f(\mathbf{p})+g(\mathbf{q})
+\right\}.
+\end{equation}
+The infimal convolution determines the lowest total cost among all decompositions of $\mathbf{u}$ into two components evaluated by $f$ and $g$, respectively.
+
+
+\subsection{Graph Signals and Graph Laplacian Regularization}
+
+We consider an undirected weighted graph $\mathcal{G}=(\mathcal{V},\mathcal{E},\mathbf{W})$ without self-loops, where $\mathcal{V}=\{v_1,\ldots,v_{|\mathcal{V}|}\}$ is the set of vertices, $\mathcal{E}=\{e_{i,j}=(v_i,v_j)\}$ is the set of edges defined for some $i<j$, and $|\mathcal{V}|$ and $|\mathcal{E}|$ denote the cardinalities of the corresponding sets.
+The diagonal matrix $\mathbf{W}\in\mathbb{R}^{|\mathcal{E}|\times|\mathcal{E}|}$ collects the positive edge weights $w_{i,j}>0$ associated with $e_{i,j}$.
+The graph is commonly represented by its unnormalized graph Laplacian matrix $\mathbf{L}\in\mathbb{R}^{|\mathcal{V}|\times|\mathcal{V}|}$, which is defined from the weighted adjacency and degree matrices \cite{}.
+The graph Laplacian admits another equivalent expression as
+\begin{equation}
+\mathbf{L}
+=
+\mathbf{D}^{\top}\mathbf{W}\mathbf{D},
+\label{eq:laplacian}
+\end{equation}
+where $\mathbf{D}\in\mathbb{R}^{|\mathcal{E}|\times|\mathcal{V}|}$ is an oriented incidence matrix defined by
+\begin{equation}
+D_{e_{i,j},v_k}
+:=
+\begin{cases}
+-1, & \text{if } i=k,\\
+1, & \text{if } j=k,\\
+0, & \text{otherwise}.
+\end{cases}
+\label{eq:incidence}
+\end{equation}
+
+A graph signal is a vector $\mathbf{x}\in\mathbb{R}^{|\mathcal{V}|}$ whose entry $x_i$ is associated with vertex $v_i$.
+A graph signal is regarded as smooth over $\mathcal{G}$ when its values tend to vary little between vertices that are strongly related by the graph.
+A standard measure of graph-signal smoothness is the quadratic form of the graph Laplacian, which gives the graph Laplacian regularization (GLR)
+\begin{equation}
+R_{\mathrm{GLR}}(\mathbf{x})
+=
+\mathbf{x}^{\top}\mathbf{L}\mathbf{x}.
+\label{eq:glr}
+\end{equation}
+A smaller value of $R_{\mathrm{GLR}}(\mathbf{x})$ indicates greater smoothness with respect to the graph structure encoded by $\mathbf{L}$, and GLR is widely used as a smoothness-promoting regularizer in graph signal recovery.
+
+
+\subsection{Preconditioned Primal-Dual Splitting (P-PDS)}
+
+P-PDS \cite{pock2011diagonal} can solve convex optimization problems of the following form:
+\begin{equation}
+\begin{aligned}
+\min_{\mathbf{x}_i,\mathbf{y}_j}\quad & \sum_{i=1}^{N} f_i(\mathbf{x}_i) + \sum_{j=1}^{M} g_j(\mathbf{y}_j)\\
+\mathrm{s.t.}\quad & \forall j\in\{1,\ldots,M\},\quad \mathbf{y}_j = \sum_{i=1}^{N} \mathbf{L}_{j,i}\mathbf{x}_i,
+\end{aligned}
+\label{eq:p_pds_general_form}
+\end{equation}
+where $f_i \in \Gamma_0(\mathbb{R}^{n_i})$ and $g_j \in \Gamma_0(\mathbb{R}^{m_j})$ are proximable, and $\mathbf{L}_{j,i} \in \mathbb{R}^{m_j\times n_i}$ are arbitrary matrices.
+Let $\rho_i,\gamma_j>0$ denote the stepsizes for the primal variable $\mathbf{x}_i$ and the dual variable $\mathbf{z}_j$, respectively.
+P-PDS performs the following updates for all $i$ and $j$, with intermediate variables $\widetilde{\mathbf{z}}_j$:
+\begin{equation}
+\begin{aligned}
+&\mathbf{x}_i^{(n+1)} = \operatorname{prox}_{\rho_i f_i}\left(\mathbf{x}_i^{(n)} - \rho_i \sum_{j=1}^{M}\mathbf{L}_{j,i}^{\top}\mathbf{z}_j^{(n)}\right),\\
+&\tilde{\mathbf{z}}_j = \mathbf{z}_j^{(n)} + \gamma_j \sum_{i=1}^{N}\mathbf{L}_{j,i}\left(2\mathbf{x}_i^{(n+1)} - \mathbf{x}_i^{(n)}\right),\\
+&\mathbf{z}_j^{(n+1)} = \tilde{\mathbf{z}}_j - \gamma_j\operatorname{prox}_{\gamma_j^{-1}g_j}\left(\gamma_j^{-1}\tilde{\mathbf{z}}_j\right).
+\end{aligned}
+\end{equation}
+Under the standard qualification condition for Problem~(6) and appropriate stepsize conditions, the generated sequence converges to a primal-dual solution.
+A recent study~\cite{...} proposed three variable-wise stepsize designs based on upper bounds $\nu_{j,i}$ of the operator norms of the matrices $\mathbf{L}_{j,i}$ while guaranteeing the required stepsize conditions.

@@ -1,0 +1,40 @@
+% \subsection{GLR Under Graph Inaccuracies}
+% \label{subsec:glr_under_graph_inaccuracies}
+% We shall first recall the definition of GLR \eqref{glr} in Preliminaries:
+% \begin{equation}
+% R_{\mathrm{GLR}}(\mathbf{u})
+% =
+% \sum_{(i,j)\in\mathcal{E}}
+% \lVert \sqrt{\mathbf{W}}\mathbf{D}\mathbf{u}\rVert_2^2
+% =
+% w_{ij}(u_i-u_j)^2.
+% \label{eq:glr_revisited}
+% \end{equation}
+% The first expression makes explicit how each edge and its weight contribute to the smoothness evaluation. The equivalent quadratic form also shows that, in the graph Fourier domain, GLR penalizes the graph-frequency-weighted energy of the signal. Thus, when the graph accurately reflects the relationships underlying the signal, GLR provides a principled quadratic smoothness measure for smooth graph signal recovery.
+
+% In practice, however, the available graph is usually constructed from imperfect information. As discussed in the preliminaries, common graph construction procedures include $k$-nearest-neighbor rules, Gaussian-kernel weighting from node features or coordinates, and graph learning from observed data. Since these procedures rely on side information, design choices, or noisy and incomplete observations, the resulting graph is only a proxy for the relationships underlying the signal. Consequently, it may contain spurious edges, missing edges, overestimated weights, and underestimated weights.
+
+% Such graph inaccuracies directly affect the terms in \eqref{eq:glr_revisited}. Spurious edges and overestimated weights excessively emphasize signal differences between node pairs that should not be strongly smoothed. Because GLR penalizes these weighted differences quadratically, such overemphasized terms can contribute disproportionately to the regularization value and lead to inappropriate smoothing in the recovered signal. In contrast, missing edges and underestimated weights weaken relations that should be important, making the corresponding signal differences contribute too little to the smoothness evaluation. As a result, other graph differences can become relatively overemphasized. Therefore, the issue caused by graph inaccuracies is not merely that the value of GLR increases or decreases, but that the graph differences governing the recovery can be determined in an inappropriate manner.
+
+
+% A natural remedy is to replace GLR with a first-order graph regularizer such as GTV. In the notation of the preliminaries, GTV is written as
+% \begin{equation}
+% R_{\mathrm{GTV}}(\mathbf{u})
+% =
+% \lVert \mathbf{W}\mathbf{D}\mathbf{u}\rVert_1 .
+% \label{eq:gtv_revisited}
+% \end{equation}
+% Since GTV penalizes graph differences linearly, it is less sensitive than GLR to large graph differences. In this sense, GTV can behave more robustly against overemphasized differences. However, GTV does not represent the same smoothness prior as GLR. While GLR quadratically penalizes graph differences and therefore strongly favors globally smooth variations over the graph, GTV relatively allows localized large differences and is often interpreted as a regularizer suitable for piecewise-smooth graph signals. Therefore, simply replacing GLR with GTV is not sufficient when the goal is to preserve the quadratic smoothness prior underlying GLR-based recovery.
+
+% Another natural option is to combine GLR and GTV. We write this additive regularizer as
+% \begin{equation}
+% R_{\mathrm{GLR+GTV}}(\mathbf{u})
+% =
+% \eta_{\mathrm{GLR}} R_{\mathrm{GLR}}(\mathbf{u})
+% +
+% \eta_{\mathrm{GTV}} R_{\mathrm{GTV}}(\mathbf{u}),
+% \label{eq:glr_gtv_revisited}
+% \end{equation}
+% where $\eta_{\mathrm{GLR}}>0$ and $\eta_{\mathrm{GTV}}>0$ are regularization parameters. This regularizer may appear to incorporate both quadratic smoothness evaluation and first-order robustness. However, it still evaluates graph differences on the same proxy graph by additive penalties. In particular, graph differences caused by spurious edges or overestimated weights still enter the GLR term directly and are strongly penalized by the quadratic component. Thus, the additive combination does not separate the overemphasized components from the GLR-type smoothness evaluation.
+
+% These observations motivate a different design principle. The objective is not merely to replace GLR with GTV, nor to add GTV to GLR. Instead, we aim to preserve the GLR-type quadratic smoothness evaluation while preventing its balance from being distorted by graph inaccuracies. In particular, graph differences excessively emphasized by spurious edges or overestimated weights should not dominate the quadratic smoothness evaluation. This motivates a regularizer that acts on the weighted graph difference itself, rather than treating the graph weights separately or simply adding another penalty to the same graph differences.

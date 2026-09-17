@@ -1,0 +1,266 @@
+\subsection{Optimization Problem}
+\label{subsec:problem_statement}
+
+We formulate a broad class of smooth graph signal recovery problems as a unified constrained convex optimization problem incorporating the proposed regularizer to mitigate excessive penalties induced by an inaccurate proxy graph.
+
+Let $\mathbf{u}^* \in \mathbb{R}^{|\mathcal{V}|}$ be the smooth graph signal to be recovered. We consider the following linear observation model: 
+\begin{equation}
+\mathbf{v}=\boldsymbol{\Phi}\mathbf{u}^*+\mathbf{n},
+\label{eq:proposed_observation_model}
+\end{equation}
+where $\mathbf{v} \in \mathbb{R}^K$ is the observed signal, and $\mathbf{n} \in \mathbb{R}^K$ is additive Gaussian noise.
+The linear observation matrix $\boldsymbol{\Phi}\in\mathbb{R}^{K\times|\mathcal{V}|}$ specifies the graph signal recovery task of interest, e.g., denoising when $\Phi = I$, inpainting when $\Phi$ is a binary masking matrix, and compressed sensing when $\Phi$ is a general sensing matrix.
+
+Under this observation model, we formulate the recovery of the smooth graph signal $\mathbf{u}^*$ as the following constrained convex optimization problem using our proposed regularizer:
+\begin{equation}
+\begin{aligned}
+\min_\mathbf{u}\quad
+R_\mathrm{IC}(\mathbf{u})\quad
+\mathrm{s.t.}\quad
+&\left\{
+\begin{aligned}
+&\boldsymbol{\Phi}\mathbf{u}\in B_{\mathbf{v},r},\\
+&\mathbf{u}\in \lbrack \underline{\mu},\overline{\mu} \rbrack^{|\mathcal{V}|},
+\end{aligned}
+\right.
+\end{aligned}
+\label{eq:proposed_constrained_problem}
+\end{equation}
+where $\mathbf{u}$ denotes the optimization variable corresponding to the recovered signal, and the closed convex constraint sets are defined as
+\begin{equation}
+B_{\mathbf{v},r}
+:=\{\mathbf{z}\in\mathbb{R}^{K}\mid
+\|\mathbf{z}-\mathbf{v}\|_2\leq r\},
+\label{eq:l2_ball_constraint_set}
+\end{equation}
+with the hyperparameters $r > 0$, and $\underline{\mu}, \overline{\mu} \in \mathbb{R}$. 
+
+The data-fidelity constraint $\boldsymbol{\Phi}\mathbf{u}\in B_{\mathbf{v},r}$ enforces the recovered signal and the observed signal to stay within a specified distance in the observation domain, i.e., $\lVert \boldsymbol{\Phi}\mathbf{u}-\mathbf{v}\rVert_2\leq r$.
+Unlike a typical penalty formulation such as $\frac{\lambda}{2}\lVert \boldsymbol{\Phi}\mathbf{u}-\mathbf{v}\rVert_2^2$ with a balancing parameter $\lambda$, this constrained formulation directly specifies the admissible discrepancy between $\boldsymbol{\Phi}\mathbf{u}$ and $\mathbf{v}$ by $r$, not in a relative balance with other terms.
+This independence allows a direct interpretation of data fidelity and facilitates tuning the hyperparameter $r$, as reported in \cite{hoge}.
+In particular, $r$ can be determined from the standard deviation $\sigma$ of the Gaussian noise $\mathbf{n}$ as $r = \theta \sigma \sqrt{K}$, where $\theta>0$ is a practical adjustment parameter, typically chosen to be close to $1$.
+
+The box constraint $\mathbf{u}\in \lbrack \underline{\mu},\overline{\mu} \rbrack^{|\mathcal{V}|}$ enforces the recovered signal to stay within the specified value range, i.e., $\underline{\mu} \leq u_i \leq \overline{\mu}$.
+The upper and lower bounds, $\underline{\mu}$ and $\overline{\mu}$, can be set to the known range of signal values or sufficiently large when such prior knowledge is unavailable.
+Additionally, the box constraint ensures Problem~\eqref{eq:proposed_constrained_problem} is well-posed in the sense that it admits at least one optimal solution, provided that the feasible set is nonempty.
+Specifically, this constraint makes the feasible set $\mathcal{S}:=\lbrack \underline{\mu},\overline{\mu} \rbrack^{|\mathcal{V}|}\cap\boldsymbol{\Phi}^{-1}(B_{\mathbf{v},r})$ compact (closed and bounded), as $\mathcal{S}$ is a closed subset of the compact set $\lbrack \underline{\mu},\overline{\mu} \rbrack^{|\mathcal{V}|}$, which follows from the fact that $\boldsymbol{\Phi}^{-1}(B_{\mathbf{v},r}) = \{\mathbf{z} \mid \boldsymbol{\Phi} \mathbf{z} \in B_{\mathbf{v}, r}\}$ is closed.
+Thus, the lower semicontinuous objective function $R_\mathrm{IC}$ attains its infimum over the feasible set.
+
+
+\subsection{P-PDS-Based Optimization Algorithm}
+\label{subsec:optimization_algorithm}
+
+We develop an efficient algorithm for solving
+Problem~\eqref{eq:proposed_constrained_problem} based on P-PDS, which
+requires neither matrix inversions nor inner iterative solvers and allows
+convergence-guaranteed variable-wise stepsize selection.
+Using
+$R_{\mathrm{IC}}(\mathbf{u})
+=
+\Psi_{\tau}(\sqrt{\mathbf{W}}\mathbf{D}\mathbf{u})$
+and the indicator functions of the constraint sets,
+Problem~\eqref{eq:proposed_constrained_problem} can be equivalently
+reformulated as
+\begin{equation}
+\begin{aligned}
+\min_{\mathbf{u},\mathbf{y}_1,\mathbf{y}_2}\quad
+&
+\iota_{B_{\mathbf{v},r}}(\mathbf{y}_1)
++
+\iota_{\lbrack\underline{\mu},\overline{\mu}\rbrack^{|\mathcal{V}|}}
+(\mathbf{u})
++
+\Psi_{\tau}(\mathbf{y}_2)
+\\
+\mathrm{s.t.}\quad
+&
+\left\{
+\begin{aligned}
+&\mathbf{y}_1=\boldsymbol{\Phi}\mathbf{u},\\
+&\mathbf{y}_2=\sqrt{\mathbf{W}}\mathbf{D}\mathbf{u}.
+\end{aligned}
+\right.
+\end{aligned}
+\label{eq:p_pds_formulation}
+\end{equation}
+This formulation fits the canonical P-PDS problem in
+\eqref{eq:p_pds_general_form} by setting
+$\mathbf{x}_1=\mathbf{u}$,
+$f_1=
+\iota_{\lbrack\underline{\mu},\overline{\mu}\rbrack^{|\mathcal{V}|}}$,
+$g_1=\iota_{B_{\mathbf{v},r}}$, and
+$g_2=\Psi_{\tau}$, with
+$\mathbf{L}_{1,1}=\boldsymbol{\Phi}$ and
+$\mathbf{L}_{2,1}=\sqrt{\mathbf{W}}\mathbf{D}$.
+
+The required proximity operators are available in closed form.
+For $\kappa>0$, the proximity operators of the two indicator functions
+are given by
+\begin{equation}
+\begin{aligned}
+&\operatorname{prox}_{
+\kappa
+\iota_{\lbrack\underline{\mu},\overline{\mu}\rbrack^{|\mathcal{V}|}}
+}
+(\mathbf{x})
+=
+\max\!\left(
+\underline{\mu},
+\min\!\left(\overline{\mu},\mathbf{x}\right)
+\right),
+\\
+&\operatorname{prox}_{\kappa\iota_{B_{\mathbf{v},r}}}(\mathbf{x})
+=
+\begin{cases}
+\mathbf{x},
+& \|\mathbf{x}-\mathbf{v}\|_2\leq r,
+\\[1mm]
+\displaystyle
+\mathbf{v}
++
+\frac{r(\mathbf{x}-\mathbf{v})}
+{\|\mathbf{x}-\mathbf{v}\|_2},
+& \text{otherwise},
+\end{cases}
+\end{aligned}
+\label{eq:prox_constraint_sets}
+\end{equation}
+where the maximum and minimum are taken componentwise.
+Moreover, as shown in Proposition~\ref{prop:optimal-decomposition},
+$\Psi_{\tau}/(2\tau)$ is a generalized Huber function and equivalently
+the Moreau envelope of the $\ell_1$ norm with parameter $\tau$.
+Using the proximity formula for Moreau envelopes
+\cite[Prop.~24.8(vii)]{BauschkeCombettes2017}, we obtain
+\begin{equation}
+\operatorname{prox}_{\kappa\Psi_{\tau}}(\mathbf{x})
+=
+\frac{1}{1+2\kappa}\left(\mathbf{x}
++
+2\kappa\operatorname{soft}
+\left(
+\mathbf{x};
+(1+2\kappa)\tau
+\right)\right).
+\label{eq:prox_psi}
+\end{equation}
+Hence, all proximity operations required by P-PDS can be evaluated
+explicitly.
+The resulting algorithm is summarized in
+Algorithm~\ref{alg:proposed_algorithm}.
+
+\begin{algorithm}[t]
+\caption{P-PDS-based algorithm for solving
+Problem~\eqref{eq:proposed_constrained_problem}}
+\label{alg:proposed_algorithm}
+\begin{algorithmic}[1]
+\STATE \textbf{Input:}
+$\mathbf{u}^{(0)}$,
+$\mathbf{z}_1^{(0)}$,
+$\mathbf{z}_2^{(0)}$
+\STATE $n\leftarrow 0$
+\WHILE{Stopping criteria are not met}
+\STATE
+$\widetilde{\mathbf{u}}
+\leftarrow
+\boldsymbol{\Phi}^{\top}\mathbf{z}_1^{(n)}
++
+(\sqrt{\mathbf{W}}\mathbf{D})^{\top}\mathbf{z}_2^{(n)}$
+\STATE
+$\mathbf{u}^{(n+1)}
+\leftarrow
+\operatorname{prox}_{
+\rho_1
+\iota_{\lbrack\underline{\mu},\overline{\mu}\rbrack^{|\mathcal{V}|}}
+}
+\left(
+\mathbf{u}^{(n)}
+-
+\rho_1\widetilde{\mathbf{u}}
+\right)$
+\STATE
+$\widetilde{\mathbf{z}}_1
+\leftarrow
+\mathbf{z}_1^{(n)}
++
+\gamma_1
+\boldsymbol{\Phi}
+\left(
+2\mathbf{u}^{(n+1)}
+-
+\mathbf{u}^{(n)}
+\right)$
+\STATE
+$\mathbf{z}_1^{(n+1)}
+\leftarrow
+\widetilde{\mathbf{z}}_1
+-
+\gamma_1
+\operatorname{prox}_{\gamma_1^{-1}\iota_{B_{\mathbf{v},r}}}
+\left(
+\gamma_1^{-1}\widetilde{\mathbf{z}}_1
+\right)$
+\STATE
+$\widetilde{\mathbf{z}}_2
+\leftarrow
+\mathbf{z}_2^{(n)}
++
+\gamma_2
+\sqrt{\mathbf{W}}\mathbf{D}
+\left(
+2\mathbf{u}^{(n+1)}
+-
+\mathbf{u}^{(n)}
+\right)$
+\STATE
+$\mathbf{z}_2^{(n+1)}
+\leftarrow
+\widetilde{\mathbf{z}}_2
+-
+\gamma_2
+\operatorname{prox}_{\gamma_2^{-1}\Psi_{\tau}}
+\left(
+\gamma_2^{-1}\widetilde{\mathbf{z}}_2
+\right)$
+\STATE $n\leftarrow n+1$
+\ENDWHILE
+\STATE \textbf{Output:} $\mathbf{u}^{(n)}$
+\end{algorithmic}
+\end{algorithm}
+
+To determine the stepsizes, we employ the second variable-wise stepsize
+design proposed in~\cite{...}, referred to therein as OVDP2.
+For the matrices in \eqref{eq:p_pds_formulation}, let $\nu_{j,1}$ denote
+upper bounds satisfying
+$\|\mathbf{L}_{j,1}\|_{\mathrm{op}}\leq\nu_{j,1}$.
+For $\mathbf{L}_{1,1}=\boldsymbol{\Phi}$, any upper bound
+$\nu_{1,1}\geq\|\boldsymbol{\Phi}\|_{\mathrm{op}}$ can be used, and the
+exact operator norm can be obtained as the largest singular value of
+$\boldsymbol{\Phi}$.
+In particular, $\nu_{1,1}=1$ can be used when
+$\boldsymbol{\Phi}=\mathbf{I}$ or when $\boldsymbol{\Phi}$ is a binary
+masking matrix.
+For $\mathbf{L}_{2,1}=\sqrt{\mathbf{W}}\mathbf{D}$, we take the exact
+operator norm
+$\nu_{2,1}
+=\|\sqrt{\mathbf{W}}\mathbf{D}\|_{\mathrm{op}}
+=\sqrt{\lambda_{\max}(\mathbf{L})}$,
+as shown in the proof of
+Proposition~\ref{prop:mathematical-properties}.
+Applying OVDP2 to these bounds yields
+\begin{equation}
+\begin{aligned}
+\rho_1
+&=
+\frac{1}
+{\nu_{1,1}+\sqrt{\lambda_{\max}(\mathbf{L})}},
+\\
+\gamma_1
+&=
+\frac{1}{\nu_{1,1}},
+\qquad
+\gamma_2
+=
+\frac{1}{\sqrt{\lambda_{\max}(\mathbf{L})}}.
+\end{aligned}
+\label{eq:stepsizes_proposed}
+\end{equation}

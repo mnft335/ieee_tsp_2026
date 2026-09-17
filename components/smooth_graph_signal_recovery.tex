@@ -1,0 +1,99 @@
+\subsection{Smoothness-Regularized Graph Signal Recovery}
+\label{subsec:smoothness_regularized_recovery}
+
+Let $\mathbf{x}^{\star}\in\mathbb{R}^{N}$ denote the target graph signal to be recovered. We consider a general linear observation model:
+\begin{equation}
+\begin{aligned}
+\mathbf{y} &= \boldsymbol{\Phi}\mathbf{x}^{\star}+\mathbf{n},
+\end{aligned}
+\label{eq:observation_model}
+\end{equation}
+where $\mathbf{y}\in\mathbb{R}^{M}$ is the observed signal, $\boldsymbol{\Phi}\in\mathbb{R}^{M\times N}$ is a known observation operator, and $\mathbf{n}\in\mathbb{R}^{M}$ represents additive Gaussian noise. This model encompasses a broad class of graph signal recovery settings, such as denoising with $\boldsymbol{\Phi}=\mathbf{I}$, inpainting with $\boldsymbol{\Phi}$ as a binary sampling matrix, and compressed sensing with $\boldsymbol{\Phi}$ as a sensing matrix.
+
+Since the observations are often noisy, incomplete, or indirect, stable recovery generally requires prior information on the target signal. Therefore, as in classical signal recovery, graph signal recovery is typically formulated by combining a data-fidelity term with a regularization term:
+\begin{equation}
+\begin{aligned}
+\min_{\mathbf{x}\in\mathbb{R}^{N}}\;
+\frac{1}{2}\lVert \boldsymbol{\Phi}\mathbf{x}-\mathbf{y}\rVert_{2}^{2}
++\lambda R(\mathbf{x}),
+\end{aligned}
+\label{eq:typical_regularized_recovery}
+\end{equation}
+where $R$ is a regularizer that encodes prior knowledge on the target signal, and $\lambda>0$ controls the strength of regularization.
+
+One of the most common priors in graph signal recovery is graph smoothness: signal-value differences tend to be small across strongly weighted edges, while relatively larger differences are allowed across weakly weighted edges. This prior naturally appears in network-structured data. For example, in a temperature sensor network, the expectation that nearby sensors measure similar temperatures can be encoded as graph smoothness by connecting nearby sensors and assigning large edge weights according to their closeness. Beyond explicitly network-structured data, graph-based smoothness priors have also been used to model signal variations that cannot be adequately captured by local neighborhoods on conventional grids \cite{tmp}.
+
+A representative smoothness-promoting regularizer is graph Laplacian regularization (GLR), which is often used as a quantitative definition of graph smoothness \cite{<smoothness_citation>}. For a graph with edge set $\mathcal{E}$, edge weights $w_{ij}>0$, and graph Laplacian $\mathbf{L}$, GLR is written as
+\begin{equation}
+\begin{aligned}
+R_{\mathrm{GLR}}(\mathbf{x}) = \mathbf{x}^{\top}\mathbf{L}\mathbf{x} = \sum_{(i,j)\in\mathcal{E}} w_{ij}(x_i-x_j)^2.
+\end{aligned}
+\label{eq:glr}
+\end{equation}
+This expression directly reflects the qualitative notion of graph smoothness described above: differences across strongly weighted edges are strongly penalized, whereas differences across weakly weighted edges are relatively tolerated. In this sense, GLR can be viewed as a graph-domain counterpart of classical Tikhonov-type quadratic smoothing, where the edge set determines which signal-value differences are evaluated, and the edge weights determine how strongly these differences are penalized.
+
+\subsection{Proxy Graph Inaccuracies and Their Effects on GLR}
+\label{subsec:proxy_graph_inaccuracies}
+
+Although GLR promotes smoothness with respect to the given graph, the graph used in recovery is often only an inaccurate proxy of the graph on which the target signal is expected to be smooth. Such a proxy graph may contain spurious or missing edges, as well as overestimated or underestimated edge weights. These inaccuracies cause the smoothness promoted by GLR to deviate from the desired smoothness structure of the target signal.
+
+Proxy graphs arise because the graph is usually constructed or estimated from information that is only indirectly related to the target signal. A common example is a graph constructed from feature vectors or spatial coordinates $\{\mathbf{z}_i\}_{i=1}^N$. For instance, the edge weight between nodes $i$ and $j$ may be defined by a Gaussian kernel as
+\begin{equation}
+\widehat{w}_{ij}
+=
+\exp\left(
+-\frac{\lVert \mathbf{z}_{i}-\mathbf{z}_{j}\rVert_{2}^{2}}
+{2\sigma^{2}}
+\right),
+\label{eq:gaussian_kernel_graph}
+\end{equation}
+where $\sigma>0$ is the kernel width. This construction is reasonable when closeness in the feature or coordinate space is expected to imply similarity of signal values. However, such information does not necessarily represent the actual variation of the target signal. For example, if the graph is constructed only from spatial distances, nearby sensors may still observe different values due to elevation, obstacles, or environmental boundaries, while spatially distant sensors may have similar values due to other relevant factors not accounted for in the graph construction. In such cases, the graph constructed from $\{\mathbf{z}_i\}_{i=1}^N$ can contain edges or weights that are inconsistent with the desired smoothness structure.
+
+Another common approach is graph learning, where the graph is estimated from available data rather than constructed from predefined features or coordinates. A generic graph learning formulation can be written as
+\begin{equation}
+\begin{aligned}
+\widehat{\mathbf{W}}
+\in
+\operatorname*{argmin}_{\mathbf{W}\in\mathcal{W}};
+\mathcal{D}(\mathbf{W};\mathbf{Y})
++
+\rho\mathcal{Q}(\mathbf{W}),
+\end{aligned}
+\label{eq:graph_learning_example}
+\end{equation}
+where $\mathbf{Y}$ denotes available data, $\mathcal{D}$ measures consistency with the data, $\mathcal{Q}$ imposes structural regularity on the graph, $\rho>0$ is a parameter, and $\mathcal{W}$ is a constraint set for admissible graphs. When a sufficient amount of high-quality data is available, such a learning-based approach can estimate a graph that captures meaningful signal relationships. In practice, however, the data available for graph construction or graph learning are often degraded by noise, missing entries, or indirect measurements. Moreover, collecting a sufficiently large number of clean graph signals is often difficult due to measurement cost, physical constraints, privacy restrictions, or limited access to the system. Therefore, even a learned graph can remain an inaccurate proxy of the smoothness structure of the target signal.
+
+Such inevitable proxy graph inaccuracies directly affect GLR because GLR evaluates signal differences according to the given edge set and edge weights. Spurious edges or overestimated weights can produce abnormally large contributions to the GLR cost by imposing strong penalties on signal differences that should not necessarily be suppressed. Missing edges or underestimated weights can weaken graph relations that may be important for smoothness promotion and make other graph differences relatively dominant in the smoothness evaluation. Consequently, GLR may emphasize inappropriate signal differences and underemphasize relevant ones, causing the recovered signal to be biased toward being smooth over the inaccurate proxy graph rather than reflecting the desired smoothness structure of the target signal.
+
+\subsection{Potential Remedies and Their Limitations}
+\label{subsec:potential_remedies}
+
+To the best of our knowledge, existing graph regularizers do not explicitly address distortions in smoothness evaluation caused by proxy graph inaccuracies. Nevertheless, possible remedies can be constructed from existing regularizers. As discussed below, however, these remedies do not provide a complete solution. A representative example is graph total variation (GTV), which can be written as
+\begin{equation}
+\begin{aligned}
+R_{\mathrm{GTV}}(\mathbf{x})
+&= \sum_{(i,j)\in\mathcal{E}}
+w_{ij}|x_i-x_j|.
+\end{aligned}
+\label{eq:gtv}
+\end{equation}
+Unlike GLR, GTV penalizes graph differences linearly rather than quadratically. Therefore, it may reduce the influence of large weighted graph differences that dominate the regularization cost under an inaccurate proxy graph.
+
+However, GTV changes the nature of the smoothness prior. While GLR promotes quadratic smoothness over the given graph, GTV promotes sparsity of graph differences and is more suitable for piecewise-smooth graph signals. Therefore, GTV does not directly preserve the GLR-type smoothness evaluation that is desirable for recovering smoothly varying graph signals.
+
+Another possible remedy is to linearly combine GLR and GTV in order to retain the quadratic smoothness-promoting property of GLR while reducing the influence of large weighted graph differences through GTV:
+\begin{equation}
+\begin{aligned}
+R_{\mathrm{GLR+GTV}}(\mathbf{x})
+&=
+\alpha R_{\mathrm{GLR}}(\mathbf{x})
++
+\beta R_{\mathrm{GTV}}(\mathbf{x}),
+\end{aligned}
+\label{eq:glr_gtv}
+\end{equation}
+where $\alpha>0$ and $\beta>0$ are regularization parameters.
+
+This seemingly natural combination, however, still relies on the same proxy graph. In particular, the GLR term continues to evaluate smoothness according to the inaccurate edge set and weights, while the GTV term evaluates graph differences induced by the same proxy graph with a different penalty. Thus, the combination does not directly resolve the distortion of smoothness evaluation caused by proxy graph inaccuracies.
+
+These observations indicate that robust smooth graph signal recovery requires a new regularization design. Such a regularizer should be robust to inaccuracies in the available proxy graph while still promoting the smoothness needed for smooth graph signal recovery.
