@@ -1,28 +1,28 @@
-\IEEEPARstart{G}{raph} signal processing (GSP) provides a theoretical framework for analyzing and processing graph signals, i.e., signals whose values are associated with the nodes of a graph \cite{shuman2013emerging,sandryhaila2013discrete,ortega2018graph}.
-As the signal domain is generalized from regular Euclidean domains, such as time axes, image grids, and spatial coordinates, to graph-structured domains, GSP extends classical signal processing concepts, including Fourier analysis, frequency, filtering, sampling, and smoothness, to their graph-induced counterparts.
+Graph signal processing (GSP) provides a theoretical framework for analyzing and processing graph signals, i.e., signals whose values are associated with the nodes of a graph \cite{shuman2013emerging,sandryhaila2013discrete,ortega2018graph}.
+As the signal domain is generalized from regular Euclidean domains, such as time axes, image grids, and spatial coordinates, to graph-structured domains, GSP extends classical signal processing concepts, including Fourier analysis, frequency, filtering, sampling, and smoothness, to their graph-induced counterparts \cite{sandryhaila2014frequency,isufi2024graphfilters,tanaka2020sampling}.
 From a signal processing perspective, a graph can be viewed as a structural model that characterizes how a signal is expected to vary over its domain, with conventional regular grids included as special cases.
-This viewpoint enables flexible signal processing for signals naturally observed over networks as well as those arising in conventional data domains such as images, point clouds, and sensor data.
+This viewpoint enables flexible signal processing for signals naturally observed over networks as well as those arising in conventional data domains such as images, point clouds, and sensor data \cite{cheung2018graphspectral,zeng2020pointcloud,jablonski2017sensor,chen2014bridge,yamagata2025robust,cheema2024shm}.
 
-Graph signal recovery is a fundamental task in GSP and often serves as a basis for downstream graph-based analysis and processing.
-Its goal is to estimate an underlying graph signal from noisy, incomplete, or indirect observations.
-Since such observations generally provide insufficient information for stable recovery, a common approach is to formulate recovery as a regularized optimization problem, where the regularizer compensates for missing or degraded signal information by imposing prior knowledge on the target signal.
+Graph signal recovery is a fundamental task in GSP, aiming to estimate an underlying graph signal from noisy, incomplete, or indirect observations \cite{onuki2016graph,berger2017graph,nagahama2022graph,yamagata2025robust}.
+Since such observations generally provide insufficient information for stable recovery, a common approach is to formulate recovery as a regularized optimization problem, where the regularizer compensates for missing or degraded signal information by imposing prior knowledge on the target signal \cite{smola2003kernels,wang2016trend}.
 In graph signal recovery, this prior knowledge has two complementary ingredients: a graph describing which signal samples are related and a signal model describing which variations over those relations are plausible.
 Accordingly, successful recovery requires both a graph that appropriately represents the relations among signal samples and a regularizer that appropriately expresses the target signal property over that graph.
 
 Among various graph signal properties, graph smoothness provides a natural means of expressing prior knowledge through pairwise relations.
 Larger edge weights indicate a stronger expectation that the connected signal values should be similar, whereas smaller weights allow larger variations between them.
 For example, in an irregular sensor network, edge weights may encode spatial proximity or similarity in sensing conditions, so that graph smoothness expresses the expectation that strongly related sensors exhibit similar measurements without assuming a regular spatial grid.
-This representation has motivated many graph signal recovery methods based on smoothness-promoting regularization.
+This representation has motivated many graph signal recovery methods based on smoothness-promoting regularization
+\cite{chen2015variation,eslamlou2017smooth,pang2017graph,perraudin2017stationary,romero2017kernel,qiu2017timevarying}.
 
-A representative smoothness-promoting regularizer is graph Laplacian regularization (GLR), which also provides one of the standard ways to quantify graph smoothness \cite{<smoothness_book_citation>}.
+A representative smoothness-promoting regularizer is graph Laplacian regularization (GLR), which provides a standard means of quantifying and promoting graph smoothness \cite{merris1994laplacian,ando2006learning,pang2017graph}.
 For a weighted graph, GLR penalizes edge-wise signal differences according to their weights, or equivalently evaluates weight-modulated graph differences in a quadratic manner.
 When the given edge weights properly reflect the variation structure of the target signal, GLR provides a natural way to promote graph-smooth signals: differences across strongly connected nodes are strongly penalized, while those across weakly connected nodes are relatively tolerated.
 In this sense, GLR can be viewed as a graph-domain extension of classical quadratic smoothing, where the graph weights determine how signal differences should be balanced over the graph.
 
-In practice, however, the graph available for signal recovery is often only an imperfect proxy for the underlying graph-smoothness structure.
+In practice, however, the graph available for signal recovery is often only an imperfect proxy for the underlying graph-smoothness structure, and graph-signal processing and recovery under mismatched or uncertain graph topologies have therefore been investigated in several studies \cite{miettinen2019robust,ceci2020topology,isufi2017randomgraphs,kenlay2020stability,ji2023probability,rey2023robust}.
 In intrinsically networked domains, such as power grids, transportation systems, and water distribution networks, the topology or candidate edge weights may be obtained from physical connections and system parameters.
 Nevertheless, even a physically valid graph does not necessarily reflect how the particular target signal is expected to vary, and its topology or weights may be affected by parameter uncertainty or changing operating conditions.
-In other applications, the graph is constructed from observed node features or pairwise relations; for example, its connectivity may be determined using a $k$-nearest-neighbor rule and its weights using a Gaussian kernel.
+In other applications, the graph is constructed from observed node features or pairwise relations; for example, its connectivity may be determined using a $k$-nearest-neighbor rule and its weights using a Gaussian kernel \cite{belkin2003laplacian,zelnikManor2004selfTuning}.  
 Noise or missing information in these features can distort both the inferred neighborhood relations and the assigned similarities, potentially connecting samples across genuine spatial or semantic boundaries.
 Moreover, selecting suitable features, similarity measures, and graph-construction parameters is itself nontrivial.
 Consequently, the resulting proxy graph may contain spurious edges, missing edges, overestimated weights, or underestimated weights.
@@ -35,10 +35,9 @@ In contrast, missing edges and underestimated weights remove or weaken informati
 Both failure modes can substantially degrade recovery performance, but they require different remedies: the former calls for limiting excessive penalties introduced by the proxy graph, whereas the latter calls for recovering or supplementing missing graph information.
 
 A natural graph-side response to this issue is to estimate a graph that more faithfully represents the variation structure of the signals of interest, so that GLR can provide an appropriate smoothness prior.
-Graph learning offers a principled framework for estimating such a graph directly from observed signal data \cite{dong2019learning_graphs}.
-For example, Dong et al. jointly estimate a graph Laplacian and smoothed representations of the input signals by minimizing their variations over the learned graph \cite{dong2016learning}, while Berger et al. extend this approach to jointly estimate the graph and underlying signals from noisy and incomplete measurements \cite{berger2020efficient}.
-Although these methods reduce reliance on predefined graph structures or hand-crafted construction rules, the learned graph depends on the quality and quantity of the available signals, as well as on structural assumptions such as sparsity, connectivity, and edge-weight constraints.
-Obtaining a sufficiently large and representative collection of high-quality signals is often difficult, and outliers, limited signal diversity, or inappropriate structural assumptions may distort or bias the estimated topology and weights.
+Graph learning offers a principled framework for inferring graph structure from observed signals under assumptions such as signal smoothness \cite{kalofolias2016how,dong2016learning,dong2019learninggraphs}.
+For example, Dong et al. jointly estimate a graph Laplacian and smoothed representations of the input signals by minimizing their variations over the learned graph \cite{dong2016learning}, while Berger et al. extend graph learning to noisy and incomplete observations through joint graph learning and signal inpainting \cite{berger2020efficient}.
+Although these approaches reduce reliance on predefined graph structures or hand-crafted construction rules, the learned graph still depends on the available observations and on modeling assumptions imposed during graph inference \cite{dong2019learninggraphs,berger2020efficient}.
 Consequently, a non-negligible mismatch may remain even when graph-learning techniques are employed.
 
 Because graph inaccuracies cannot always be avoided in practice, a complementary regularizer-side approach is needed when signal recovery relies on an imperfect proxy graph.
@@ -51,16 +50,17 @@ This naturally raises the following research question:
 \emph{How can we limit the influence of excessive proxy-weighted edge differences while retaining the ability to promote the graph smoothness of the underlying signal, without prior knowledge of which graph relations are inaccurate?}
 
 In this paper, we propose an infimal-convolution-based magnitude-adaptive regularizer for graph signal recovery to mitigate excessive penalties introduced by spurious edges and overestimated weights in a proxy graph.
-The proposed regularizer decomposes the proxy-weighted edge-difference vector, i.e., the weighted edge-difference vector induced by the proxy graph, into a quadratically evaluated component and a linearly evaluated component.
-Through the allocation induced by infimal convolution, ordinary proxy-weighted edge differences are evaluated quadratically in a GLR-like manner, whereas the excessive portions of large differences are evaluated through a linearly growing penalty.
-This allocation is determined automatically according to the magnitudes of the proxy-weighted edge differences and requires no prior knowledge of which graph relations are inaccurate.
-Consequently, the proposed regularizer limits excessive penalties while retaining the ability to promote the graph smoothness of the underlying signal.
+The proposed regularizer uses infimal convolution to decompose the proxy-weighted edge-difference vector into a quadratically evaluated component and a linearly evaluated component, allowing portions that would otherwise incur excessively large quadratic costs to be evaluated with slower growth.
+The penalty induced by this decomposition coincides with a scaled separable Huber penalty.
+Consequently, ordinary proxy-weighted edge differences are evaluated quadratically in a GLR-like manner, whereas the influence of excessively large differences is moderated through linear growth.
+This magnitude-adaptive evaluation requires no prior knowledge of whether graph inaccuracies are present, what types they take, or which graph relations are affected, while retaining the ability to promote the graph smoothness of the underlying signal.
 
 The main contributions of this paper are summarized below.
 \begin{itemize}
 \item
-We propose an infimal-convolution-based magnitude-adaptive regularizer designed to mitigate excessive penalties that can arise from spurious edges and overestimated weights in a proxy graph.
-By adapting the evaluation to the magnitude of each proxy-weighted edge difference, the proposed regularizer retains GLR-like quadratic evaluation for ordinary differences while limiting the influence of excessive ones through linear growth.
+We develop an infimal-convolution-based magnitude-adaptive regularization design to mitigate excessive penalties caused by inaccuracies in a proxy graph.
+The resulting regularizer admits an equivalent scaled separable Huber representation, retaining GLR-like quadratic evaluation for ordinary proxy-weighted edge differences while limiting the influence of excessively large ones through linear growth.
+We further establish that, among edge-domain penalties satisfying a prescribed Lipschitz bound, the proposed penalty is the pointwise largest minorant of the quadratic GLR edge-domain penalty.
 
 \item
 We formulate graph signal recovery with the proposed regularizer as a general constrained convex optimization problem and establish the existence of optimal solutions under mild assumptions.
@@ -72,6 +72,6 @@ We derive an efficient algorithm based on preconditioned primal--dual splitting,
 Experiments are conducted on noisy graph signal inpainting tasks using both synthetic and real-world data.
 In the synthetic experiments, we first evaluate the proposed method under spurious-edge and overestimated-weight inaccuracies, which directly correspond to the excessive-penalty failure mode targeted in this work.
 We then consider a more realistic mixed-inaccuracy setting in which spurious edges, missing edges, overestimated weights, and underestimated weights coexist, thereby introducing both excessive-penalty and information-loss effects.
-The proposed method is compared with GLR and potential alternatives, including GTV and the convex combination of GLR and GTV.
+The proposed method is compared with GLR and potential alternatives, including GTV \cite{berger2017graph} and the sum of GLR and GTV.
 The results show that the proposed method mitigates performance degradation when graph inaccuracies induce excessive proxy-weighted edge differences and retains its benefit when multiple types of inaccuracies coexist.
 Experiments on real-world meteorological signals are further conducted to assess its practical effectiveness when recovery relies on naturally imperfect spatial proxy graphs.

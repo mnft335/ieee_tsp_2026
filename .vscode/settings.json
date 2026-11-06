@@ -1,21 +1,71 @@
 {
     "latex-workshop.latex.tools": [
         {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ]
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%"
+            ]
+        },
+        {
+            "name": "latexmk (pdflatex)",
+            "command": "latexmk",
+            "args": [
+                "-pdf",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ]
+        },
+        {
             "name": "latexmk",
             "command": "latexmk",
             "args": [
                 "%DOCFILE_EXT%"
             ]
-        },
+        }
     ],
     "latex-workshop.latex.recipes": [
         {
+            "name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
+            "tools": [
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "latexmk (pdflatex)",
+            "tools": [
+                "latexmk (pdflatex)"
+            ]
+        },
+        {
+            "name": "pdflatex",
+            "tools": [
+                "pdflatex"
+            ]
+        },
+        {
             "name": "compile",
             "tools": [
-                "latexmk",
+                "latexmk"
             ]
         }
     ],
+    "latex-workshop.latex.recipe.default": "first",
     "latex-workshop.latex.autoBuild.run": "never",
     "latex-workshop.view.pdf.viewer": "tab",
     "latex-workshop.latex.autoClean.run": "onFailed",
@@ -52,9 +102,9 @@
         //"*.log",
         //"*/*.log"
     ],
-    "latex-workshop.latexindent.path": "sh",
-    "latex-workshop.latexindent.args": [
-        "./bin/linter.sh",
+    "latex-workshop.formatting.latexindent.path": "sh",
+    "latex-workshop.formatting.latexindent.args": [
+        "./bin/linter.sh"
     ],
     "editor.wordSeparators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?．。，、（）「」［］｛｝《》てにをはがのともへでや",
     "editor.formatOnSave": false

@@ -19,13 +19,534 @@ edition = {2nd},
 abstract = {This reference text, now in its second edition, offers a modern unifying presentation of three basic areas of nonlinear analysis: convex analysis, monotone operator theory, and the fixed point theory of nonexpansive operators. Taking a unique comprehensive approach, the theory is developed from the ground up, with the rich connections and interactions between the areas as the central focus, and it is illustrated by a large number of examples. The Hilbert space setting of the material offers a wide range of applications while avoiding the technical difficulties of general Banach spaces. The authors have also drawn upon recent advances and modern tools to simplify the proofs of key results making the book more accessible to a broader range of scholars and users. Combining a strong emphasis on applications with exceptionally lucid writing and an abundance of exercises,this text is of great value to a large audience including pure and applied mathematicians as well as researchers in engineering, data science, machine learning, physics, decision sciences, economics, and inverse problems. The second edition of Convex Analysis and Monotone Operator Theory in Hilbert Spaces greatly expands on the first edition, containing over 140 pages of new material, over 270 new results, and more than 100 new exercises. It features a new chapter on proximity operators including two sections on proximity operators of matrix functions, in addition to several new sections distributed throughout the original chapters. Many existing results have been improved, and the list of references has been updated. Heinz H. Bauschke is a Full Professor of Mathematics at the Kelowna campus of the University of British Columbia, Canada. Patrick L. Combettes, IEEE Fellow, was on the faculty of the City University of New York and of Universit Pierre et Marie Curie Paris 6 before joining North Carolina State University as a Distinguished Professor of Mathematics in 2016.}
 }
 
-@ARTICLE{SelesnickFarshchian2017,
-  author={Selesnick, Ivan},
+@INPROCEEDINGS{Ono2015GraphTGV,
+  author={Ono, Shunsuke and Yamada, Isao and Kumazawa, Itsuo},
+  booktitle={2015 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, 
+  title={Total generalized variation for graph signals}, 
+  year={2015},
+  volume={},
+  number={},
+  pages={5456-5460},
+  keywords={Smoothing methods;Optimization;TV;Signal processing;Three-dimensional displays;Graph theory;Convex functions;Graph signal processing;total generalized variation (TGV);proximal splitting},
+  doi={10.1109/ICASSP.2015.7179014}}
+
+@article{Afonso2010,
+author = {Afonso, Manya and Bioucas-Dias, Jose and Figueiredo, Mário},
+year = {2011},
+month = {03},
+pages = {681-695},
+title = {An Augmented Lagrangian Approach to the Constrained Optimization Formulation of Imaging Inverse Problems},
+volume = {20},
+journal = {IEEE Transactions on Image Processing},
+doi = {10.1109/TIP.2010.2076294}
+}
+
+@article{OnoYamada2015,
+  title={Signal recovery with certain involved convex data-fidelity constraints},
+  author={Ono, Shunsuke and Yamada, Isao},
+  journal={IEEE Transactions on Signal Processing},
+  volume={63},
+  number={22},
+  pages={6149--6163},
+  year={2015},
+  publisher={IEEE}
+}
+
+@article{Chierchia2015,
+  title={Epigraphical projection and proximal tools for solving constrained convex optimization problems},
+  author={Chierchia, Giovanni and Pustelnik, Nelly and Pesquet, J-C and Pesquet-Popescu, B{\'e}atrice},
+  journal={Signal, Image and Video Processing},
+  volume={9},
+  number={8},
+  pages={1737--1749},
+  year={2015},
+  publisher={Springer}
+}
+
+@article{Ono2017PnP,
+  title={Primal-dual plug-and-play image restoration},
+  author={Ono, Shunsuke},
+  journal={IEEE Signal Processing Letters},
+  volume={24},
+  number={8},
+  pages={1108--1112},
+  year={2017},
+  publisher={IEEE}
+}
+
+@article{Ono2017L0,
+  title={{$L_0$} Gradient Projection},
+  author={Ono, Shunsuke},
+  journal={IEEE Transactions on Image Processing},
+  volume={26},
+  number={4},
+  pages={1554--1564},
+  year={2017},
+  publisher={IEEE}
+}
+
+@article{NaganumaOno2023,
+  title={Variable-wise diagonal preconditioning for primal-dual splitting: Design and applications},
+  author={Naganuma, Kazuki and Ono, Shunsuke},
+  journal={IEEE Transactions on Signal Processing},
+  volume={71},
+  pages={3281--3295},
+  year={2023},
+  publisher={IEEE}
+}
+
+@article{Menne2012GHCNDaily,
+  author  = {Menne, Matthew and Durre, Imke and Vose, Russell and Gleason, Byron and Houston, Tamara},
+  title   = {An Overview of the Global Historical Climatology Network-Daily Database},
+  journal = {Journal of Atmospheric and Oceanic Technology},
+  volume  = {29},
+  pages   = {897--910},
+  year    = {2012},
+  month   = jul,
+  doi     = {10.1175/JTECH-D-11-00103.1}
+}
+
+@article{chambolle2011first,
+  title={A first-order primal-dual algorithm for convex problems with applications to imaging},
+  author={Chambolle, Antonin and Pock, Thomas},
+  journal={Journal of Mathematical Imaging and Vision},
+  volume={40},
+  number={1},
+  pages={120--145},
+  year={2011},
+  publisher={Springer}
+}
+
+@article{DallChristensen2002,
+  title = {Random geometric graphs},
+  author = {Dall, Jesper and Christensen, Michael},
+  journal = {Phys. Rev. E},
+  volume = {66},
+  issue = {1},
+  pages = {016121},
+  numpages = {9},
+  year = {2002},
+  month = {Jul},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevE.66.016121},
+  url = {https://link.aps.org/doi/10.1103/PhysRevE.66.016121}
+}
+
+@article{merris1994laplacian,
+  title={Laplacian matrices of graphs: a survey},
+  author={Merris, Russell},
+  journal={Linear algebra and its Applications},
+  volume={197},
+  pages={143--176},
+  year={1994},
+  publisher={Elsevier}
+}
+
+@article{ando2006learning,
+  title={Learning on graph with Laplacian regularization},
+  author={Ando, Rie and Zhang, Tong},
+  journal={Advances in neural information processing systems},
+  volume={19},
+  year={2006}
+}
+
+@inproceedings{pock2011diagonal,
+  title={Diagonal preconditioning for first order primal-dual algorithms in convex optimization},
+  author={Pock, Thomas and Chambolle, Antonin},
+  booktitle={2011 International Conference on Computer Vision},
+  pages={1762--1769},
+  year={2011},
+  organization={IEEE}
+}
+
+@ARTICLE{shuman2013emerging,
+  author={Shuman, David I and Narang, Sunil K. and Frossard, Pascal and Ortega, Antonio and Vandergheynst, Pierre},
+  journal={IEEE Signal Processing Magazine}, 
+  title={The emerging field of signal processing on graphs: Extending high-dimensional data analysis to networks and other irregular domains}, 
+  year={2013},
+  volume={30},
+  number={3},
+  pages={83-98},
+  keywords={Tutorials;Biological neural networks;Harmonic analysis;Spectral analysis;Frequency domain analysis},
+  doi={10.1109/MSP.2012.2235192}}
+
+@ARTICLE{sandryhaila2013discrete,
+  author={Sandryhaila, Aliaksei and Moura, José M. F.},
   journal={IEEE Transactions on Signal Processing}, 
-  title={Sparse Regularization via Convex Analysis}, 
+  title={Discrete Signal Processing on Graphs}, 
+  year={2013},
+  volume={61},
+  number={7},
+  pages={1644-1656},
+  keywords={Fourier transforms;Laplace equations;Graphical models;Digital signal processing;Manifolds;Graph Fourier transform;graphical models;Markov random fields;network science;signal processing},
+  doi={10.1109/TSP.2013.2238935}}
+
+@ARTICLE{ortega2018graph,
+  author={Ortega, Antonio and Frossard, Pascal and Kovačević, Jelena and Moura, José M. F. and Vandergheynst, Pierre},
+  journal={Proceedings of the IEEE}, 
+  title={Graph Signal Processing: Overview, Challenges, and Applications}, 
+  year={2018},
+  volume={106},
+  number={5},
+  pages={808-828},
+  keywords={Signal processing;Laplace equations;Graph theory;Machine learning;Data models;Social network services;Sampling methods;Graphical models;Graph signal processing (GSP);network science and graphs;sampling;signal processing},
+  doi={10.1109/JPROC.2018.2820126}}
+
+@ARTICLE{onuki2016graph,
+  author={Onuki, Masaki and Ono, Shunsuke and Yamagishi, Masao and Tanaka, Yuichi},
+  journal={IEEE Transactions on Signal and Information Processing over Networks}, 
+  title={Graph Signal Denoising via Trilateral Filter on Graph Spectral Domain}, 
+  year={2016},
+  volume={2},
+  number={2},
+  pages={137-148},
+  keywords={Smoothing methods;Spectral analysis;Information processing;Laplace equations;Image edge detection;Frequency-domain analysis;Noise reduction;Trilateral filter;graph signal processing;spectral graph theory;denoising;3D mesh smoothing;SURE;Cp-type cost;Trilateral filter;graph signal processing;spectral graph theory;denoising;3-D mesh smoothing;SURE;Cp-type cost},
+  doi={10.1109/TSIPN.2016.2532464}}
+
+@ARTICLE{berger2017graph,
+  author={Berger, Peter and Hannak, Gabor and Matz, Gerald},
+  journal={IEEE Journal of Selected Topics in Signal Processing}, 
+  title={Graph Signal Recovery via Primal-Dual Algorithms for Total Variation Minimization}, 
+  year={2017},
+  volume={11},
+  number={6},
+  pages={842-855},
+  keywords={Noise measurement;Signal processing algorithms;Minimization;Computational modeling;Optimization;Hilbert space;Signal processing;Distributed optimization;graph signal processing;inpainting;interpolation;primal-dual hybrid gradient;sampling;semi-supervised learning},
+  doi={10.1109/JSTSP.2017.2726978}}
+
+@ARTICLE{nagahama2022graph,
+  author={Nagahama, Masatoshi and Yamada, Koki and Tanaka, Yuichi and Chan, Stanley H. and Eldar, Yonina C.},
+  journal={IEEE Transactions on Signal Processing}, 
+  title={Graph Signal Restoration Using Nested Deep Algorithm Unrolling}, 
+  year={2022},
+  volume={70},
+  number={},
+  pages={3296-3311},
+  keywords={Signal processing algorithms;Image restoration;Signal restoration;Noise reduction;Task analysis;Symmetric matrices;Optimization;Graph signal processing;signal restoration;deep algorithm unrolling;Plug-and-Play ADMM},
+  doi={10.1109/TSP.2022.3180546}}
+
+@ARTICLE{yamagata2025robust,
+  author={Yamagata, Eisuke and Naganuma, Kazuki and Ono, Shunsuke},
+  journal={IEEE Transactions on Signal and Information Processing over Networks}, 
+  title={Robust Time-Varying Graph Signal Recovery for Dynamic Physical Sensor Network Data}, 
+  year={2025},
+  volume={11},
+  number={},
+  pages={59-70},
+  keywords={Vehicle dynamics;Estimation;Cost function;Signal processing algorithms;Signal processing;Drones;Topology;Monitoring;Laplace equations;Filtering;Graph signal processing;graph signal recovery;time-varying graph signal;dynamic topology;constrained optimization},
+  doi={10.1109/TSIPN.2025.3525978}}
+
+@ARTICLE{pang2017graph,
+  author={Pang, Jiahao and Cheung, Gene},
+  journal={IEEE Transactions on Image Processing}, 
+  title={Graph Laplacian Regularization for Image Denoising: Analysis in the Continuous Domain}, 
+  year={2017},
+  volume={26},
+  number={4},
+  pages={1770-1785},
+  keywords={Laplace equations;Noise reduction;Image denoising;Measurement;Imaging;Anisotropic magnetoresistance;Manifolds;Graph Laplacian regularization;graph signal processing;image denoising},
+  doi={10.1109/TIP.2017.2651400}}
+
+@INPROCEEDINGS{miettinen2019robust,
+  author={Miettinen, Jari and Vorobyov, Sergiy A. and Ollila, Esa},
+  booktitle={ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, 
+  title={Robust Least Mean Squares Estimation of Graph Signals}, 
+  year={2019},
+  volume={},
+  number={},
+  pages={5416-5420},
+  keywords={Greedy algorithms;Interpolation;Correlation;Laplace equations;Estimation;Signal processing algorithms;Signal processing;Topology;Speech processing;Optimization;Graph signal processing;Laplacian matrix;least mean squares},
+  doi={10.1109/ICASSP.2019.8683193}}
+
+@ARTICLE{ceci2020topology,
+  author={Ceci, Elena and Barbarossa, Sergio},
+  journal={IEEE Transactions on Signal Processing}, 
+  title={Graph Signal Processing in the Presence of Topology Uncertainties}, 
+  year={2020},
+  volume={68},
+  number={},
+  pages={1558-1573},
+  keywords={Perturbation methods;Topology;Laplace equations;Uncertainty;Signal processing;Network topology;Robustness;Graph topologies;random networks;robust graph signal processing;small perturbation analysis},
+  doi={10.1109/TSP.2020.2976583}}
+
+@InProceedings{kalofolias2016how,
+  title = 	 {How to Learn a Graph from Smooth Signals},
+  author = 	 {Kalofolias, Vassilis},
+  booktitle = 	 {Proceedings of the 19th International Conference on Artificial Intelligence and Statistics},
+  pages = 	 {920--929},
+  year = 	 {2016},
+  editor = 	 {Gretton, Arthur and Robert, Christian C.},
+  volume = 	 {51},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {Cadiz, Spain},
+  month = 	 {09--11 May},
+  publisher =    {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v51/kalofolias16.pdf},
+  url = 	 {https://proceedings.mlr.press/v51/kalofolias16.html},
+  abstract = 	 {We propose a framework to learn the graph structure underlying a set of smooth signals. Given X∈\mathbbR^m\times n whose rows reside on the vertices of an unknown graph, we learn the edge weights w∈\mathbbR_+^m(m-1)/2 under the smoothness assumption that \rm trX^⊤LX is small, where L is the graph Laplacian.  We show that the problem is a weighted \ell-1 minimization that leads to naturally sparse solutions. We prove that the standard graph construction with Gaussian weights w_ij = \exp(-\frac1σ^2\|x_i-x_j\|^2) and the previous state of the art are special cases of our framework. We propose a new model and present efficient, scalable primal-dual based algorithms both for this and the previous state of the art, to evaluate their performance on artificial and real data. The new model performs best in most settings.}
+}
+
+@ARTICLE{dong2016learning,
+  author={Dong, Xiaowen and Thanou, Dorina and Frossard, Pascal and Vandergheynst, Pierre},
+  journal={IEEE Transactions on Signal Processing}, 
+  title={Learning Laplacian Matrix in Smooth Graph Signal Representations}, 
+  year={2016},
+  volume={64},
+  number={23},
+  pages={6160-6173},
+  keywords={Laplace equations;Topology;Signal processing;Signal processing algorithms;Analytical models;Signal representation;Kernel;Laplacian matrix learning;graph signal processing;representation theory;factor analysis;Gaussian prior},
+  doi={10.1109/TSP.2016.2602809}}
+
+@ARTICLE{dong2019learninggraphs,
+  author={Dong, Xiaowen and Thanou, Dorina and Rabbat, Michael and Frossard, Pascal},
+  journal={IEEE Signal Processing Magazine}, 
+  title={Learning Graphs From Data: A Signal Representation Perspective}, 
+  year={2019},
+  volume={36},
+  number={3},
+  pages={44-63},
+  keywords={Data models;Signal representation;Random variables;Graphical models;Covariance matrices;Signal processing},
+  doi={10.1109/MSP.2018.2887284}}
+
+@ARTICLE{berger2020efficient,
+  author={Berger, Peter and Hannak, Gabor and Matz, Gerald},
+  journal={IEEE Transactions on Signal and Information Processing over Networks}, 
+  title={Efficient Graph Learning From Noisy and Incomplete Data}, 
+  year={2020},
+  volume={6},
+  number={},
+  pages={105-119},
+  keywords={Noise measurement;Laplace equations;Optimization;Topology;Signal processing algorithms;Learning systems;Graph signal processing;topology identification;nearest neighbor graphs;signal inpainting;ADMM},
+  doi={10.1109/TSIPN.2020.2964249}}
+
+@ARTICLE{sandryhaila2014frequency,
+  author={Sandryhaila, Aliaksei and Moura, José M. F.},
+  journal={IEEE Transactions on Signal Processing}, 
+  title={Discrete Signal Processing on Graphs: Frequency Analysis}, 
+  year={2014},
+  volume={62},
+  number={12},
+  pages={3042-3054},
+  keywords={Laplace equations;Band-pass filters;Manifolds;Fourier transforms;Eigenvalues and eigenfunctions;Digital signal processing;Band pass;filter design;high pass;low pass;regularization;signal processing on graphs;total variation},
+  doi={10.1109/TSP.2014.2321121}}
+
+@ARTICLE{isufi2024graphfilters,
+  author={Isufi, Elvin and Gama, Fernando and Shuman, David I and Segarra, Santiago},
+  journal={IEEE Transactions on Signal Processing}, 
+  title={Graph Filters for Signal Processing and Machine Learning on Graphs}, 
+  year={2024},
+  volume={72},
+  number={},
+  pages={4745-4781},
+  keywords={Filter banks;Low-pass filters;Information filters;Signal processing;Filtering theory;Convolution;Machine learning;Graph signal processing;graph machine learning;graph convolution;filter identification;graph filter banks and wavelets;graph neural networks;distributed processing;collaborative filtering;graph-based image processing;mesh processing;point clouds;topology identification;spectral clustering;matrix completion;graph Gaussian processes},
+  doi={10.1109/TSP.2024.3349788}}
+
+@ARTICLE{cheung2018graphspectral,
+  author={Cheung, Gene and Magli, Enrico and Tanaka, Yuichi and Ng, Michael K.},
+  journal={Proceedings of the IEEE}, 
+  title={Graph Spectral Image Processing}, 
+  year={2018},
+  volume={106},
+  number={5},
+  pages={907-930},
+  keywords={Laplace equations;Image coding;Image edge detection;Transforms;Eigenvalues and eigenfunctions;Graph theory;Signal processing;Social network services;Digital images;Spectral analysis;Wireless sensor networks;Graph signal processing;image processing},
+  doi={10.1109/JPROC.2018.2799702}}
+
+@ARTICLE{zeng2020pointcloud,
+  author={Zeng, Jin and Cheung, Gene and Ng, Michael and Pang, Jiahao and Yang, Cheng},
+  journal={IEEE Transactions on Image Processing}, 
+  title={3D Point Cloud Denoising Using Graph Laplacian Regularization of a Low Dimensional Manifold Model}, 
+  year={2020},
+  volume={29},
+  number={},
+  pages={3474-3489},
+  keywords={Three-dimensional displays;Manifolds;Noise reduction;Laplace equations;Surface treatment;Noise measurement;Image denoising;Graph signal processing;point cloud denoising;low-dimensional manifold},
+  doi={10.1109/TIP.2019.2961429}}
+
+@article{chen2015variation,
+author = {Chen, Siheng and Sandryhaila, Aliaksei and Moura, Jose and Kovacevic, Jelena},
+year = {2015},
+month = {09},
+pages = {4609-4624},
+title = {Signal Recovery on Graphs: Variation Minimization},
+volume = {63},
+journal = {IEEE Transactions on Signal Processing},
+doi = {10.1109/TSP.2015.2441042}
+}
+
+@INPROCEEDINGS{eslamlou2017smooth,
+  author={Eslamlou, Gita Babazadeh and Jung, Alexander and Goertz, Norbert},
+  booktitle={2017 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, 
+  title={Smooth graph signal recovery via efficient Laplacian solvers}, 
+  year={2017},
+  volume={},
+  number={},
+  pages={5915-5919},
+  keywords={Laplace equations;Noise measurement;Optimization;Iterative methods;Convergence;Convex functions;Signal processing;graph signal processing;compressed sensing;Tikhonov-regularization;Laplacian solvers},
+  doi={10.1109/ICASSP.2017.7953291}}
+
+@ARTICLE{rey2023robust,
+  author={Rey, Samuel and Tenorio, Victor M. and Marqués, Antonio G.},
+  journal={IEEE Transactions on Signal Processing}, 
+  title={Robust Graph Filter Identification and Graph Denoising From Signal Observations}, 
+  year={2023},
+  volume={71},
+  number={},
+  pages={3651-3666},
+  keywords={Perturbation methods;Task analysis;Topology;Optimization;Signal processing algorithms;Network topology;Convergence;Graph filter identification;graph denoising;robust graph signal processing;graph perturbations},
+  doi={10.1109/TSP.2023.3300632}}
+
+@article{ji2023probability,
+author = {Ji, Feng and Tay, Wee Peng and Ortega, Antonio},
+year = {2023},
+month = {01},
+pages = {1159-1174},
+title = {Graph Signal Processing Over a Probability Space of Shift Operators},
+volume = {71},
+journal = {IEEE Transactions on Signal Processing},
+doi = {10.1109/TSP.2023.3263675}
+}
+
+@article{chen2014bridge,
+  title = {Semi-Supervised Multiresolution Classification Using Adaptive Graph Filtering With Application to Indirect Bridge Structural Health Monitoring},
+  author = {Siheng Chen and Fernando Cerda and Piervincenzo Rizzo and Jacobo Bielak and James H. Garrett and Jelena Kovačević},
+  year = {2014},
+  journal = {IEEE Transactions on Signal Processing},
+  doi = {10.1109/tsp.2014.2313528},
+}
+
+@ARTICLE{cheema2024shm,
+  author={Cheema, Muhammad Asaad and Sarwar, Muhammad Zohaib and Gogineni, Vinay Chakravarthi and Cantero, Daniel and Rossi, Pierluigi Salvo},
+  journal={IEEE Sensors Journal}, 
+  title={Computationally Efficient Structural Health Monitoring Using Graph Signal Processing}, 
+  year={2024},
+  volume={24},
+  number={7},
+  pages={11895-11905},
+  keywords={Sensors;Bridges;Monitoring;Signal processing;Signal processing algorithms;Laplace equations;Feature extraction;Finite-element model (FEM);graph signal processing (GSP);joint graph Laplacian;Kullback–Leibler (KL) divergence;KW51 bridge;structural health monitoring (SHM)},
+  doi={10.1109/JSEN.2024.3366346}}
+
+@ARTICLE{tanaka2020sampling,
+  author={Tanaka, Yuichi and Eldar, Yonina C. and Ortega, Antonio and Cheung, Gene},
+  journal={IEEE Signal Processing Magazine}, 
+  title={Sampling Signals on Graphs: From Theory to Applications}, 
+  year={2020},
+  volume={37},
+  number={6},
+  pages={14-30},
+  keywords={Graphical models;Hilbert space;Manganese;Signal sampling;Frequency-domain analysis;Symmetric matrices},
+  doi={10.1109/MSP.2020.3016908}}
+
+@ARTICLE{jablonski2017sensor,
+  author={Jabłoński, Ireneusz},
+  journal={IEEE Sensors Journal}, 
+  title={Graph Signal Processing in Applications to Sensor Networks, Smart Grids, and Smart Cities}, 
+  year={2017},
+  volume={17},
+  number={23},
+  pages={7659-7666},
+  keywords={Signal processing;Intelligent sensors;Laplace equations;Smart cities;Monitoring;Smart grids;Big data;signal processing;complex networks;sensor networks;smart cities},
+  doi={10.1109/JSEN.2017.2733767}}
+
+@InProceedings{smola2003kernels,
+author="Smola, Alexander J.
+and Kondor, Risi",
+editor="Sch{\"o}lkopf, Bernhard
+and Warmuth, Manfred K.",
+title="Kernels and Regularization on Graphs",
+booktitle="Learning Theory and Kernel Machines",
+year="2003",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="144--158",
+abstract="We introduce a family of kernels on graphs based on the notion of regularization operators. This generalizes in a natural way the notion of regularization and Greens functions, as commonly used for real valued functions, to graphs. It turns out that diffusion kernels can be found as a special case of our reasoning. We show that the class of positive, monotonically decreasing functions on the unit interval leads to kernels and corresponding regularization operators.",
+isbn="978-3-540-45167-9"
+}
+
+@article{wang2016trend,
+  author  = {Yu-Xiang Wang and James Sharpnack and Alexander J. Smola and Ryan J. Tibshirani},
+  title   = {Trend Filtering on Graphs},
+  journal = {Journal of Machine Learning Research},
+  year    = {2016},
+  volume  = {17},
+  number  = {105},
+  pages   = {1--41},
+  url     = {http://jmlr.org/papers/v17/15-147.html}
+}
+
+@ARTICLE{perraudin2017stationary,
+  author={Perraudin, Nathanaël and Vandergheynst, Pierre},
+  journal={IEEE Transactions on Signal Processing}, 
+  title={Stationary Signal Processing on Graphs}, 
   year={2017},
   volume={65},
-  number={17},
-  pages={4481-4494},
-  keywords={Cost function;Convolution;Signal processing algorithms;Convex functions;Noise reduction;TV;Standards;Sparse regularization;sparse approximation;convex function;optimization;denoising},
-  doi={10.1109/TSP.2017.2711501}}
+  number={13},
+  pages={3462-3477},
+  keywords={Laplace equations;Spectral analysis;Correlation;Data models;Kernel;Fourier transforms;Stationarity;graphs;spectral graph theory;graph signal processing;power spectral density;Wiener filter;covariance estimation;gaussian markov random fields},
+  doi={10.1109/TSP.2017.2690388}}
+
+@ARTICLE{romero2017kernel,
+  author={Romero, Daniel and Ma, Meng and Giannakis, Georgios B.},
+  journal={IEEE Transactions on Signal Processing}, 
+  title={Kernel-Based Reconstruction of Graph Signals}, 
+  year={2017},
+  volume={65},
+  number={3},
+  pages={764-778},
+  keywords={Kernel;Signal reconstruction;Estimation;Laplace equations;Bandwidth;Fourier transforms;Social network services;Graph signal reconstruction;kernel regression;multi-kernel learning},
+  doi={10.1109/TSP.2016.2620116}}
+
+@ARTICLE{qiu2017timevarying,
+  author={Qiu, Kai and Mao, Xianghui and Shen, Xinyue and Wang, Xiaohan and Li, Tiejian and Gu, Yuantao},
+  journal={IEEE Journal of Selected Topics in Signal Processing}, 
+  title={Time-Varying Graph Signal Reconstruction}, 
+  year={2017},
+  volume={11},
+  number={6},
+  pages={870-883},
+  keywords={Laplace equations;Reconstruction algorithms;Ocean temperature;Signal reconstruction;Eigenvalues and eigenfunctions;Meteorology;Distributed computing;online reconstruction;time-varying graph signal;signal reconstruction},
+  doi={10.1109/JSTSP.2017.2726969}}
+
+@ARTICLE{isufi2017randomgraphs,
+  author={Isufi, Elvin and Loukas, Andreas and Simonetto, Andrea and Leus, Geert},
+  journal={IEEE Transactions on Signal Processing}, 
+  title={Filtering Random Graph Processes Over Random Time-Varying Graphs}, 
+  year={2017},
+  volume={65},
+  number={16},
+  pages={4406-4421},
+  keywords={Finite impulse response filters;Topology;Laplace equations;Eigenvalues and eigenfunctions;Roads;Fourier transforms;Signal processing on graphs;graph filters;random graphs;random graph signals;graph signal denoising;graph sparsification},
+  doi={10.1109/TSP.2017.2706186}}
+
+@INPROCEEDINGS{kenlay2020stability,
+  author={Kenlay, Henry and Thanou, Dorina and Dong, Xiaowen},
+  booktitle={ICASSP 2020 - 2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, 
+  title={On The Stability of Polynomial Spectral Graph Filters}, 
+  year={2020},
+  volume={},
+  number={},
+  pages={5350-5354},
+  keywords={Laplace equations;Perturbation methods;Stability analysis;Graph neural networks;Topology;Task analysis;Speech processing;Graph signal processing;spectral graph filters;stability analysis},
+  doi={10.1109/ICASSP40776.2020.9054072}}
+
+@ARTICLE{belkin2003laplacian,
+  author={Belkin, Mikhail and Niyogi, Partha},
+  journal={Neural Computation}, 
+  title={Laplacian Eigenmaps for Dimensionality Reduction and Data Representation}, 
+  year={2003},
+  volume={15},
+  number={6},
+  pages={1373-1396},
+  keywords={},
+  doi={10.1162/089976603321780317}}
+
+@inproceedings{zelnikManor2004selfTuning,
+ author = {Zelnik-manor, Lihi and Perona, Pietro},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {L. Saul and Y. Weiss and L. Bottou},
+ pages = {},
+ publisher = {MIT Press},
+ title = {Self-Tuning Spectral Clustering},
+ volume = {17},
+ year = {2004}
+}

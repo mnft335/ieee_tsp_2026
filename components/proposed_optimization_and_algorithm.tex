@@ -37,7 +37,7 @@ with the hyperparameters $r > 0$, and $\underline{\mu}, \overline{\mu} \in \math
 
 The data-fidelity constraint $\boldsymbol{\Phi}\mathbf{u}\in B_{\mathbf{v},r}$ enforces the recovered signal and the observed signal to stay within a specified distance in the observation domain, i.e., $\lVert \boldsymbol{\Phi}\mathbf{u}-\mathbf{v}\rVert_2\leq r$.
 Unlike a typical penalty formulation such as $\frac{\lambda}{2}\lVert \boldsymbol{\Phi}\mathbf{u}-\mathbf{v}\rVert_2^2$ with a balancing parameter $\lambda$, this constrained formulation directly specifies the admissible discrepancy between $\boldsymbol{\Phi}\mathbf{u}$ and $\mathbf{v}$ by $r$, not in a relative balance with other terms.
-This independence allows a direct interpretation of data fidelity and facilitates tuning the hyperparameter $r$, as reported in \cite{hoge}.
+This independence allows a direct interpretation of data fidelity and facilitates principled hyperparameter control \cite{Afonso2010, OnoYamada2015, Chierchia2015, Ono2017PnP, Ono2017L0}.
 In particular, $r$ can be determined from the standard deviation $\sigma$ of the Gaussian noise $\mathbf{n}$ as $r = \theta \sigma \sqrt{K}$, where $\theta>0$ is a practical adjustment parameter, typically chosen to be close to $1$.
 
 The box constraint $\mathbf{u}\in \lbrack \underline{\mu},\overline{\mu} \rbrack^{|\mathcal{V}|}$ enforces the recovered signal to stay within the specified value range, i.e., $\underline{\mu} \leq u_i \leq \overline{\mu}$.
@@ -126,11 +126,7 @@ are given by
 \label{eq:prox_constraint_sets}
 \end{equation}
 where the maximum and minimum are taken componentwise.
-Moreover, as shown in Proposition~\ref{prop:optimal-decomposition},
-$\Psi_{\tau}/(2\tau)$ is a generalized Huber function and equivalently
-the Moreau envelope of the $\ell_1$ norm with parameter $\tau$.
-Using the proximity formula for Moreau envelopes
-\cite[Prop.~24.8(vii)]{BauschkeCombettes2017}, we obtain
+Moreover, as noted in Remark~\ref{rem:proximability}, $\Psi_{\tau}$ is proximable, and its proximity operator is given by
 \begin{equation}
 \operatorname{prox}_{\kappa\Psi_{\tau}}(\mathbf{x})
 =
@@ -227,8 +223,7 @@ $\mathbf{z}_2^{(n+1)}
 \end{algorithmic}
 \end{algorithm}
 
-To determine the stepsizes, we employ the second variable-wise stepsize
-design proposed in~\cite{...}, referred to therein as OVDP2.
+To determine the stepsizes, we employ the second variable-wise stepsize design proposed in \cite{NaganumaOno2023}, referred to therein as OVDP2.
 For the matrices in \eqref{eq:p_pds_formulation}, let $\nu_{j,1}$ denote
 upper bounds satisfying
 $\|\mathbf{L}_{j,1}\|_{\mathrm{op}}\leq\nu_{j,1}$.
@@ -264,3 +259,4 @@ Applying OVDP2 to these bounds yields
 \end{aligned}
 \label{eq:stepsizes_proposed}
 \end{equation}
+Under the standard qualification condition stated in Section~II-C, the resulting sequence converges to a solution of Problem~\eqref{eq:proposed_constrained_problem}.

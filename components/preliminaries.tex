@@ -19,7 +19,7 @@ f(\mathbf{y})
 \end{equation}
 We call a function proximable if its proximity operator has a closed-form expression or can be efficiently computed.
 
-For two   functions $f,g:\mathbb{R}^{d}\to(-\infty,+\infty]$, their infimal convolution \cite{bauschke2017convex} is defined as
+For two   functions $f,g:\mathbb{R}^{d}\to(-\infty,+\infty]$, their infimal convolution \cite{BauschkeCombettes2017} is defined as
 \begin{equation}
 (f\Box g)(\mathbf{u})
 =
@@ -35,7 +35,7 @@ The infimal convolution determines the lowest total cost among all decomposition
 
 We consider an undirected weighted graph $\mathcal{G}=(\mathcal{V},\mathcal{E},\mathbf{W})$ without self-loops, where $\mathcal{V}=\{v_1,\ldots,v_{|\mathcal{V}|}\}$ is the set of vertices, $\mathcal{E}=\{e_{i,j}=(v_i,v_j)\}$ is the set of edges defined for some $i<j$, and $|\mathcal{V}|$ and $|\mathcal{E}|$ denote the cardinalities of the corresponding sets.
 The diagonal matrix $\mathbf{W}\in\mathbb{R}^{|\mathcal{E}|\times|\mathcal{E}|}$ collects the positive edge weights $w_{i,j}>0$ associated with $e_{i,j}$.
-The graph is commonly represented by its unnormalized graph Laplacian matrix $\mathbf{L}\in\mathbb{R}^{|\mathcal{V}|\times|\mathcal{V}|}$, which is defined from the weighted adjacency and degree matrices \cite{}.
+The graph is commonly represented by its unnormalized graph Laplacian matrix $\mathbf{L}\in\mathbb{R}^{|\mathcal{V}|\times|\mathcal{V}|}$, which is defined from the weighted adjacency and degree matrices \cite{merris1994laplacian}.
 The graph Laplacian admits another equivalent expression as
 \begin{equation}
 \mathbf{L}
@@ -57,7 +57,7 @@ D_{e_{i,j},v_k}
 
 A graph signal is a vector $\mathbf{x}\in\mathbb{R}^{|\mathcal{V}|}$ whose entry $x_i$ is associated with vertex $v_i$.
 A graph signal is regarded as smooth over $\mathcal{G}$ when its values tend to vary little between vertices that are strongly related by the graph.
-A standard measure of graph-signal smoothness is the quadratic form of the graph Laplacian, which gives the graph Laplacian regularization (GLR)
+A standard measure of graph-signal smoothness is the quadratic form of the graph Laplacian, which gives the graph Laplacian regularization (GLR) \cite{merris1994laplacian,ando2006learning}.
 \begin{equation}
 R_{\mathrm{GLR}}(\mathbf{x})
 =
@@ -88,4 +88,4 @@ P-PDS performs the following updates for all $i$ and $j$, with intermediate vari
 \end{aligned}
 \end{equation}
 Under the standard qualification condition for Problem~(6) and appropriate stepsize conditions, the generated sequence converges to a primal-dual solution.
-A recent study~\cite{...} proposed three variable-wise stepsize designs based on upper bounds $\nu_{j,i}$ of the operator norms of the matrices $\mathbf{L}_{j,i}$ while guaranteeing the required stepsize conditions.
+A recent study \cite{NaganumaOno2023} proposed three variable-wise stepsize designs based on upper bounds $\nu_{j,i}$ of the operator norms of the matrices $\mathbf{L}_{j,i}$ while guaranteeing the required stepsize conditions.

@@ -19,8 +19,8 @@ Here, $\mathbf{D}$ and $\mathbf{W}$ represent the edge connectivity and edge wei
 Accordingly, we refer to the entries of $\sqrt{\mathbf{W}}\mathbf{D}\mathbf{u}$ as proxy-weighted signal differences.
 Topology inaccuracies alter which signal differences are represented through $\mathbf{D}$, whereas edge-weight inaccuracies alter how strongly those differences are scaled through $\mathbf{W}$.
 Although these inaccuracies arise from different graph-side mechanisms, their effects on GLR can thus be interpreted through distortions of the proxy-weighted signal differences.
-This viewpoint motivates examining robustness in terms of how such potentially distorted quantities should be evaluated by the regularizer.
 
+Accordingly, in the remainder of this section, we analyze the robustness of the regularizer to graph inaccuracies primarily through the proxy-weighted signal differences $\sqrt{\mathbf{W}}\mathbf{D}\mathbf{u}$, rather than directly through $\mathbf{D}$ and $\mathbf{W}$.
 Under the quadratic evaluation of GLR, these distortions can lead to two distinct failure modes:
 \begin{itemize}
     \item \emph{Excessive-penalty failure mode:}
@@ -32,7 +32,7 @@ Under the quadratic evaluation of GLR, these distortions can lead to two distinc
     Consequently, competing observation-consistent signals can receive insufficient regularization and become difficult to distinguish from the underlying signal.
 \end{itemize}
 
-In this paper, we focus on the excessive-penalty failure mode and consider a new smoothness regularizer that mitigates the excessive influence of proxy-weighted signal differences without identifying or correcting inaccurate graph relations themselves.
+In this paper, we focus on the excessive-penalty failure mode and consider a magnitude-adaptive smoothness regularization design that mitigates the excessive influence of proxy-weighted signal differences without identifying or correcting inaccurate graph relations themselves.
 Although the proposed regularizer does not directly address information loss caused by missing edges or underestimated weights, we also consider mixed-inaccuracy settings in the experiments to assess whether its benefit is retained when both failure modes coexist.
 
 
@@ -68,26 +68,39 @@ where $\Psi_{\tau}:\mathbb{R}^{|\mathcal{E}|}\rightarrow\mathbb{R}$ is defined b
 \end{equation}
 \end{definition}
 
-In this construction, $\mathbf{p}$ is assigned a cost as in GLR, whereas $\mathbf{q}$ is assigned a linear cost, whose growth is controlled by the parameter $\tau$.
-Rather than evaluating the entire proxy-weighted signal-difference vector quadratically, the optimization over its decompositions allows portions that would incur excessive quadratic costs to be assigned to $\mathbf{q}$ and evaluated by the more slowly growing $\ell_1$ term.
+In this construction, $\mathbf{p}$ is assigned a quadratic cost as in GLR, whereas $\mathbf{q}$ is assigned a linear cost, whose growth is controlled by the parameter $\tau$.
+Rather than evaluating $\sqrt{\mathbf{W}}\mathbf{D}\mathbf{u}$ entirely through the quadratic cost, the optimization over its decompositions can redirect portions that would otherwise incur excessive quadratic costs to $\mathbf{q}$, for which the assigned $\ell_1$ cost grows more slowly than the quadratic cost evaluated at $\mathbf{p}$.
 This mechanism depends only on the magnitudes of the proxy-weighted signal differences and therefore requires no prior knowledge of the presence, types, or locations of graph inaccuracies.
 
-Before establishing the detailed properties of the proposed regularizer, we record a convex-analytic characterization of $\Psi_{\tau}$ that will be useful throughout the subsequent analysis.
-In particular, its separability allows the proposed regularizer to be analyzed componentwise, while its Moreau-envelope representation provides useful regularity and optimization properties.
+The resulting edge-domain penalty admits a standard Huber characterization through its Moreau-envelope representation \cite{Selesnick2017}.
+The following fact makes this relationship explicit and will also be used in the subsequent analysis.
 
-\begin{fact}[Moreau-envelope characterization]
-\label{fact:moreau-characterization}
-The scaled function $\Psi_{\tau}/(2\tau)$ is the Moreau envelope of the $\ell_1$ norm with parameter $\tau$.
-Moreover, $\Psi_{\tau}$ is separable.
+\begin{fact}[Moreau-envelope and Huber characterization]
+\label{fact:huber}
+The scaled function $\Psi_\tau/(2\tau)$ is the Moreau envelope of the $\ell_1$ norm with parameter $\tau$.
+Moreover, $\Psi_\tau$ is separable and can be written as
+\[
+\Psi_\tau(\mathbf{z})
+=
+2\sum_{e\in\mathcal{E}}H_\tau(z_e),
+\]
+where
+\[
+H_\tau(t)
+=
+\begin{cases}
+\frac{1}{2}t^2, & |t|\leq\tau,\\
+\tau|t|-\frac{1}{2}\tau^2, & |t|>\tau,
+\end{cases}
+\]
+is the scalar Huber function with threshold $\tau$.
 \end{fact}
 
-Accordingly, $\Psi_{\tau}/(2\tau)$ can also be expressed, up to the corresponding scaling, as a sum of scalar Huber functions \cite{Selesnick2017}.
-By the standard properties of Moreau envelopes, $\Psi_{\tau}$ is finite-valued, convex, and continuous.
-Since $R_{\mathrm{IC}}$ is the composition of $\Psi_{\tau}$ with a linear operator, $R_{\mathrm{IC}}$ is also convex and continuous.
+Thus, the penalty induced by the infimal-convolution design is a scaled separable Huber penalty acting on the GLR-type proxy-weighted signal differences $\sqrt{\mathbf{W}}\mathbf{D}\mathbf{u}$.
+By the standard properties of Moreau envelopes, $\Psi_\tau$ is finite-valued, convex, and continuous, and so is $R_{\mathrm{IC}}$ by \eqref{eq:proposed-regularizer}.
 
-We next characterize how the infimal convolution decomposes the proxy-weighted signal differences.
+We next use the infimal-convolution representation to characterize how the proxy-weighted signal differences are optimally decomposed between the quadratic and linear components.
 This characterization makes the magnitude-adaptive allocation induced by the proposed regularizer explicit.
-
 For notational convenience, let
 \begin{equation}
 \mathbf{z}
@@ -127,19 +140,14 @@ with $\operatorname{sign}(0)=0$.
 \end{proposition}
 
 \begin{IEEEproof}
-Eliminating $\mathbf{p}$ from Definition~\ref{def:proposed-regularizer} shows that $\mathbf{q}^{\star}=\operatorname{prox}_{\tau\|\cdot\|_1}(\mathbf{z})=\operatorname{soft}(\mathbf{z};\tau)$ \cite[Prop.~24.8(vii)]{BauschkeCombettes2017}.
-The corresponding proximal objective is strongly convex, and hence the minimizing component is unique.
-The relation $\mathbf{p}^{\star}=\mathbf{z}-\mathbf{q}^{\star}=\operatorname{clip}(\mathbf{z};\tau)$ follows from \eqref{eq:soft-definition}--\eqref{eq:clip-definition}.
+Eliminating $\mathbf{p}$ from \eqref{eq:edge-domain-penalty} shows that the infimum is attained at $\mathbf{q}^{\star}=\operatorname{prox}_{\tau\|\cdot\|_1}(\mathbf{z})$, which is the well-known soft-thresholding operator given by \eqref{eq:soft-definition}.
+The equality constraint then gives $\mathbf{p}^{\star}=\mathbf{z}-\mathbf{q}^{\star}=\operatorname{clip}(\mathbf{z};\tau)$.
 \end{IEEEproof}
 
-Proposition~\ref{prop:optimal-decomposition} formalizes the intended magnitude-adaptive allocation.
+Proposition~\ref{prop:optimal-decomposition} formalizes the intended magnitude-adaptive behavior governed by the threshold $\tau$.
 If $|z_e|\leq\tau$, then $q_e^{\star}=0$, and the corresponding proxy-weighted signal difference remains entirely in the quadratically evaluated component.
 If $|z_e|>\tau$, then $|p_e^{\star}|=\tau$, and the threshold-exceeding portion $|z_e|-\tau$ is assigned to $q_e^{\star}$.
-This allocation depends only on the magnitude of the proxy-weighted signal difference and does not require explicit identification of inaccurate graph relations.
-Since Proposition~\ref{prop:optimal-decomposition} establishes that the infimum in \eqref{eq:edge-domain-penalty} is attained, we use $\min$ instead of $\inf$ for the corresponding optimization expressions hereafter.
-
-The optimal decomposition also reveals how the proposed regularization value is related to the original GLR cost.
-The following proposition separates this relation from the decomposition mechanism itself.
+The optimal decomposition further reveals how the proposed regularization value differs from the original GLR cost.
 
 \begin{proposition}[Relation to GLR]
 \label{prop:relation-to-glr}
@@ -169,66 +177,33 @@ R_{\mathrm{GLR}}(\mathbf{u})
 \end{proposition}
 
 \begin{IEEEproof}
-The expressions in Proposition~\ref{prop:optimal-decomposition} give $p_e^{\star}q_e^{\star}=\tau|q_e^{\star}|$ for every $e\in\mathcal{E}$, and hence $\langle\mathbf{p}^{\star},\mathbf{q}^{\star}\rangle=\tau\|\mathbf{q}^{\star}\|_1$.
-Using $\mathbf{z}=\mathbf{p}^{\star}+\mathbf{q}^{\star}$ therefore gives
-\begin{equation}
-\|\mathbf{z}\|_2^2
+Let $\mathbf{z}:=\sqrt{\mathbf{W}}\mathbf{D}\mathbf{u}$.
+Notice that the Huber function in Fact~\ref{fact:huber} can equivalently be written as
+\[
+2H_\tau(z_e)
 =
-\|\mathbf{p}^{\star}\|_2^2
-+
-2\tau\|\mathbf{q}^{\star}\|_1
-+
-\|\mathbf{q}^{\star}\|_2^2
-=
-R_{\mathrm{IC}}(\mathbf{u})
-+
-\|\mathbf{q}^{\star}\|_2^2,
-\end{equation}
-which proves \eqref{eq:ric-glr-relation}.
+z_e^2
+-
+\left(
+\max\{|z_e|-\tau,0\}
+\right)^2.
+\]
+By Proposition~\ref{prop:optimal-decomposition},
+$|q_e^\star|=\max\{|z_e|-\tau,0\}$.
+Hence, summing the above relation over $e\in\mathcal{E}$ and using \eqref{eq:glr-edge-domain} gives \eqref{eq:ric-glr-relation}.
 Equation~\eqref{eq:ric-glr-relation} gives equality with GLR if and only if $\mathbf{q}^{\star}=\mathbf{0}$.
-By \eqref{eq:soft-definition}, this condition is equivalent to $\|\mathbf{z}\|_{\infty}\leq\tau$, which proves \eqref{eq:exact-glr-coincidence}.
+By Proposition~\ref{prop:optimal-decomposition}, this condition is equivalent to $\|\mathbf{z}\|_\infty\leq\tau$, which, together with \eqref{eq:z-definition}, proves \eqref{eq:exact-glr-coincidence}.
 \end{IEEEproof}
 
-Thus, the proposed regularizer preserves the GLR cost exactly when none of the proxy-weighted signal differences activates the alternative component $\mathbf{q}^{\star}$.
-When the threshold is exceeded, the following result characterizes how the corresponding edge contribution grows without explicitly identifying the source of the excessive difference.
-
-\begin{proposition}[Edgewise linear growth beyond the threshold]
-\label{prop:edgewise-linear-growth}
-The edge-domain function $\Psi_{\tau}$ is separable with respect to the components of $\mathbf{z}$.
-For every edge $e\in\mathcal{E}$ satisfying $|z_e|>\tau$, the contribution associated with $z_e$ is
-\begin{equation}
-2\tau|z_e|-\tau^2.
-\label{eq:edgewise-linear-growth}
-\end{equation}
-Hence, every threshold-exceeding component exhibits linear growth with respect to its magnitude.
-\end{proposition}
-
-\begin{IEEEproof}
-The separability of $\Psi_{\tau}$ follows from Fact~\ref{fact:moreau-characterization}.
-For any edge satisfying $|z_e|>\tau$, Proposition~\ref{prop:optimal-decomposition} gives $|p_e^{\star}|=\tau$ and $|q_e^{\star}|=|z_e|-\tau$.
-The corresponding contribution to \eqref{eq:edge-domain-penalty} is therefore
-\begin{equation}
-|p_e^{\star}|^2
-+
-2\tau|q_e^{\star}|
-=
-\tau^2
-+
-2\tau(|z_e|-\tau)
-=
-2\tau|z_e|-\tau^2,
-\end{equation}
-which proves \eqref{eq:edgewise-linear-growth}.
-\end{IEEEproof}
-
-Proposition~\ref{prop:edgewise-linear-growth} provides a direct interpretation of the proposed regularizer for graph inaccuracies that enlarge proxy-weighted signal differences.
-A particularly simple case is an overestimated proxy edge weight.
+Proposition~\ref{prop:relation-to-glr} shows that the proposed regularizer coincides with GLR when no proxy-weighted signal difference exceeds the threshold.
+When threshold-exceeding components are present, the proposed regularizer reduces the GLR cost by $\|\mathbf{q}^{\star}\|_2^2$, thereby suppressing their excessive contribution.
 
 \begin{remark}[Sensitivity to excessive edge weights]
 \label{rem:weight-sensitivity}
-Consider an individual proxy edge $e$ and fix its signal difference $d_e:=(\mathbf{D}\mathbf{u})_e\neq0$.
+By Fact~\ref{fact:huber}, the contribution associated with each proxy-weighted signal difference $z_e$ grows quadratically for $|z_e|\leq\tau$ and linearly as $2\tau|z_e|-\tau^2$ for $|z_e|>\tau$.
+As an illustrative example, consider an individual proxy edge $e$ and fix its signal difference $d_e:=(\mathbf{D}\mathbf{u})_e\neq0$.
 Its proxy-weighted signal difference is $z_e=\sqrt{w_e}d_e$.
-Once $\sqrt{w_e}|d_e|>\tau$, Proposition~\ref{prop:edgewise-linear-growth} gives the corresponding contribution to the proposed regularizer as
+Once $\sqrt{w_e}|d_e|>\tau$, the corresponding contribution to the proposed regularizer is
 \begin{equation}
 2\tau\sqrt{w_e}|d_e|-\tau^2.
 \label{eq:weight-sensitivity-edge-cost}
@@ -236,7 +211,6 @@ Once $\sqrt{w_e}|d_e|>\tau$, Proposition~\ref{prop:edgewise-linear-growth} gives
 Hence, for fixed $d_e$, the contribution grows as $\Theta(\sqrt{w_e})$ with the proxy edge weight, whereas the corresponding GLR contribution $w_ed_e^2$ grows as $\Theta(w_e)$.
 This reduced growth characterizes the sensitivity of the proposed regularizer to an overestimated edge weight after the resulting proxy-weighted signal difference exceeds the threshold.
 The same argument applies to a spurious edge by interpreting $w_e>0$ as the proxy weight assigned to the newly introduced edge.
-Once the weighted signal difference across that spurious edge exceeds the threshold, its dependence on the assigned proxy weight follows the same $\Theta(\sqrt{w_e})$ growth.
 \end{remark}
 
 Finally, we establish the smoothness of the proposed regularizer.
@@ -244,7 +218,7 @@ This property characterizes its mathematical regularity and will also be useful 
 
 \begin{proposition}[Gradient and smoothness of the proposed regularizer]
 \label{prop:mathematical-properties}
-The proposed regularizer is continuously differentiable with gradient
+The proposed regularizer is differentiable with gradient
 \begin{equation}
 \nabla R_{\mathrm{IC}}(\mathbf{u})
 =
@@ -261,51 +235,75 @@ Moreover, $\nabla R_{\mathrm{IC}}$ is $2\lambda_{\max}(\mathbf{L})$-Lipschitz co
 \end{proposition}
 
 \begin{IEEEproof}
-By Fact~\ref{fact:moreau-characterization} and the standard gradient formula for the Moreau envelope \cite[Prop.~12.30]{BauschkeCombettes2017}, $\nabla\Psi_{\tau}(\mathbf{z})=2\left(\mathbf{z}-\operatorname{prox}_{\tau\|\cdot\|_1}(\mathbf{z})\right)$.
-The chain rule therefore gives $\nabla R_{\mathrm{IC}}(\mathbf{u})=2\mathbf{D}^{\top}\sqrt{\mathbf{W}}\left(\sqrt{\mathbf{W}}\mathbf{D}\mathbf{u}-\operatorname{prox}_{\tau\|\cdot\|_1}(\sqrt{\mathbf{W}}\mathbf{D}\mathbf{u})\right)$, which reduces to \eqref{eq:regularizer-gradient}.
-Since proximity operators are firmly nonexpansive, $\mathbf{I}-\operatorname{prox}_{\tau\|\cdot\|_1}$ is nonexpansive.
-Hence, for any $\mathbf{u},\mathbf{v}\in\mathbb{R}^{|\mathcal{V}|}$,
+By the Moreau-envelope characterization in Fact~\ref{fact:huber} and the standard properties of the Moreau envelope \cite[Prop.~12.30]{BauschkeCombettes2017},
+\begin{equation}
+\nabla\Psi_{\tau}(\mathbf{z})
+=
+2\left(
+\mathbf{z}
+-
+\operatorname{prox}_{\tau\|\cdot\|_1}(\mathbf{z})
+\right),
+\label{eq:psi-gradient}
+\end{equation}
+and $\nabla\Psi_{\tau}$ is $2$-Lipschitz continuous.
+Let $\mathbf{A}:=\sqrt{\mathbf{W}}\mathbf{D}$.
+Applying the chain rule to \eqref{eq:proposed-regularizer} gives
+\begin{equation}
+\nabla R_{\mathrm{IC}}(\mathbf{u})
+=
+\mathbf{A}^{\top}
+\nabla\Psi_{\tau}
+\left(
+\mathbf{A}\mathbf{u}
+\right),
+\end{equation}
+which, together with \eqref{eq:psi-gradient} and Proposition~\ref{prop:optimal-decomposition}, yields \eqref{eq:regularizer-gradient}.
+For any $\mathbf{u},\mathbf{v}\in\mathbb{R}^{|\mathcal{V}|}$, the $2$-Lipschitz continuity of $\nabla\Psi_{\tau}$ gives
 \begin{align}
 \|\nabla R_{\mathrm{IC}}(\mathbf{u})-\nabla R_{\mathrm{IC}}(\mathbf{v})\|_2
 &\leq
 2
-\|\mathbf{D}^{\top}\sqrt{\mathbf{W}}\|_{\mathrm{op}}
 \left\|
-\sqrt{\mathbf{W}}\mathbf{D}(\mathbf{u}-\mathbf{v})
+\mathbf{A}^{\top}
+\right\|_{\mathrm{op}}
+\left\|
+\mathbf{A}(\mathbf{u}-\mathbf{v})
 \right\|_2
 \nonumber
 \\
 &\leq
 2
-\|\sqrt{\mathbf{W}}\mathbf{D}\|_{\mathrm{op}}^2
+\left\|
+\mathbf{A}
+\right\|_{\mathrm{op}}^2
 \|\mathbf{u}-\mathbf{v}\|_2
 \nonumber
 \\
 &=
 2\lambda_{\max}(\mathbf{L})
-\|\mathbf{u}-\mathbf{v}\|_2,
+\|\mathbf{u}-\mathbf{v}\|_2, 
 \end{align}
-where $\|\sqrt{\mathbf{W}}\mathbf{D}\|_{\mathrm{op}}^2=\lambda_{\max}(\mathbf{D}^{\top}\mathbf{W}\mathbf{D})=\lambda_{\max}(\mathbf{L})$.
+where the third line follows from $\|\mathbf{A}\|_{\mathrm{op}}^2=\lambda_{\max}(\mathbf{A}^{\top}\mathbf{A})$ and \eqref{eq:laplacian}.
 \end{IEEEproof}
 
 \begin{remark}[Proximability and splitting]
 \label{rem:proximability}
-The proximity operator of $\Psi_{\tau}$ admits a closed-form expression.
-Accordingly, although $R_{\mathrm{IC}}=\Psi_{\tau}\circ(\sqrt{\mathbf{W}}\mathbf{D})$ does not in general admit a proximity operator obtained by directly composing the corresponding operators, an appropriate primal--dual splitting formulation can exploit $\operatorname{prox}_{\Psi_{\tau}}$.
-Its explicit form and the resulting algorithm are presented in Section~IV.
+Although $R_{\mathrm{IC}}=\Psi_{\tau}\circ(\sqrt{\mathbf{W}}\mathbf{D})$ is not proximable in general, $\Psi_{\tau}$ itself is proximable, with its proximity operator available in closed form as given later in \eqref{eq:prox_psi}.
+Accordingly, optimization problems involving $R_{\mathrm{IC}}$ can be handled by suitable splitting algorithms.
+A specific instance of such an algorithm is presented in Section~IV.
 \end{remark}
 
 
-\subsection{Robustness Analysis and Comparison with Potential Alternatives}
+\subsection{Edge-Domain Sensitivity Analysis and Comparison with Potential Alternatives}
 \label{subsec:alternatives}
 
-The robustness of the proposed regularizer against perturbations of the proxy-weighted signal differences can be characterized through the Lipschitz continuity of its edge-domain penalty $\Psi_{\tau}$.
-Specifically, Lipschitz continuity ensures that a perturbation of the proxy-weighted signal differences cannot induce an arbitrarily large change in the regularization value.
-The following proposition establishes this property and quantifies the resulting perturbation sensitivity.
+In this subsection, we characterize the robustness of the proposed regularizer through the Lipschitz continuity of its associated edge-domain penalty $\Psi_{\tau}$.
+In addition, we compare it with potential alternatives and establish an optimality property of the proposed edge-domain penalty as a replacement for the quadratic one in GLR under a prescribed Lipschitz constraint.
 
 \begin{proposition}[Lipschitz continuity and perturbation sensitivity]
 \label{prop:edge-difference-sensitivity}
-For all $\mathbf{z},\widetilde{\mathbf{z}}\in\mathbb{R}^{|\mathcal{E}|}$, $\Psi_{\tau}$ satisfies
+For all $\mathbf{z},\widetilde{\mathbf{z}}\in\mathbb{R}^{|\mathcal{E}|}$, $\Psi_{\tau}$ is Lipschitz continuous with respect to $\ell_1$ and $\ell_2$ norms, specifically:
 \begin{equation}
 \left|
 \Psi_{\tau}(\mathbf{z})
@@ -338,7 +336,7 @@ For arbitrary $\mathbf{z}$ and $\widetilde{\mathbf{z}}$, the triangle inequality
 \begin{align}
 \Psi_{\tau}(\mathbf{z})
 &=
-\inf_{\mathbf{y}}
+\min_{\mathbf{y}}
 \left\{
 \|\mathbf{y}\|_2^2
 +
@@ -347,7 +345,7 @@ For arbitrary $\mathbf{z}$ and $\widetilde{\mathbf{z}}$, the triangle inequality
 \nonumber
 \\
 &\leq
-\inf_{\mathbf{y}}
+\min_{\mathbf{y}}
 \left\{
 \|\mathbf{y}\|_2^2
 +
@@ -360,15 +358,15 @@ For arbitrary $\mathbf{z}$ and $\widetilde{\mathbf{z}}$, the triangle inequality
 &=
 \Psi_{\tau}(\widetilde{\mathbf{z}})
 +
-2\tau\|\mathbf{z}-\widetilde{\mathbf{z}}\|_1.
+2\tau\|\mathbf{z}-\widetilde{\mathbf{z}}\|_1,
 \end{align}
-Interchanging $\mathbf{z}$ and $\widetilde{\mathbf{z}}$ proves the first inequality in \eqref{eq:psi-lipschitz}, while $\|\mathbf{x}\|_1\leq\sqrt{|\mathcal{E}|}\|\mathbf{x}\|_2$ gives the second.
+where we use $\min$ instead of $\inf$ since attainment was established in Proposition~\ref{prop:optimal-decomposition}.
+Interchanging $\mathbf{z}$ and $\widetilde{\mathbf{z}}$ proves the first inequality in \eqref{eq:psi-lipschitz}, while the norm equivalence $\|\mathbf{x}\|_1\leq\sqrt{|\mathcal{E}|}\|\mathbf{x}\|_2$ gives the second.
 Equation~\eqref{eq:edge-difference-sensitivity} follows by setting $\widetilde{\mathbf{z}}=\mathbf{z}+\boldsymbol{\delta}$.
 \end{IEEEproof}
 
-Proposition~\ref{prop:edge-difference-sensitivity} shows that the robustness of the proposed regularizer against perturbations of the proxy-weighted signal differences can be characterized by the global Lipschitz continuity of $\Psi_{\tau}$.
-In particular, the resulting change in the regularization value is uniformly bounded in terms of the perturbation magnitude, independently of the original proxy-weighted signal-difference vector.
-In contrast, the quadratic edge-domain penalty of GLR is not globally Lipschitz continuous, and therefore does not admit such a uniform perturbation bound.
+Equation~\eqref{eq:edge-difference-sensitivity} shows that the change in the regularization value is uniformly bounded in terms of the perturbation magnitude, independently of the original proxy-weighted signal-difference vector.
+In contrast, the quadratic edge-domain penalty of GLR is not globally Lipschitz continuous and therefore does not admit such a uniform perturbation bound.
 
 A natural alternative for obtaining bounded sensitivity is graph total variation (GTV) regularization, defined as
 \begin{equation}
@@ -380,8 +378,8 @@ R_{\mathrm{GTV}}(\mathbf{u})
 w_{i,j}|u_i-u_j|.
 \label{eq:gtv}
 \end{equation}
-Let $\mathbf{r}:=\mathbf{W}\mathbf{D}\mathbf{u}$ denote the weighted edge-difference vector directly evaluated by GTV.
-The corresponding edge-domain penalty $G(\mathbf{r})=\|\mathbf{r}\|_1$ satisfies
+Let $\mathbf{r}:=\mathbf{W}\mathbf{D}\mathbf{u}$ and $G(\mathbf{r}):=\|\mathbf{r}\|_1$ denote the weighted edge-difference vector and its edge-domain penalty, respectively.
+By the triangle inequality and norm equivalence,
 \begin{equation}
 \left|
 G(\mathbf{r})
@@ -395,13 +393,11 @@ G(\widetilde{\mathbf{r}})
 \|\mathbf{r}-\widetilde{\mathbf{r}}\|_2.
 \label{eq:gtv-lipschitz}
 \end{equation}
-Thus, GTV is globally Lipschitz continuous with respect to both the $\ell_1$ and $\ell_2$ norms of the edge-domain quantity that it directly evaluates.
-However, this bounded sensitivity is obtained by applying an $\ell_1$-type evaluation over the entire graph-difference domain.
-GTV therefore promotes sparse graph differences and a piecewise-smooth signal model rather than the quadratic graph smoothness promoted by GLR.
-This difference is also reflected in the well-known staircasing effect of TV-type regularization, in which gradual signal variations may be represented by piecewise-flat transitions.
+Thus, GTV has globally bounded sensitivity to perturbations of the weighted edge-difference vector and avoids the unbounded quadratic sensitivity of GLR to large weighted signal differences.
+However, its $\ell_1$ evaluation promotes sparsity of the weighted edge differences, corresponding to a piecewise-smooth signal model rather than the quadratic graph smoothness promoted by GLR, which can lead to the well-known staircasing effect of TV-type regularization \cite{Ono2015GraphTGV}.
 
-One may alternatively combine GLR and GTV in an attempt to retain the graph-smoothness prior of GLR while incorporating the bounded-sensitivity property of GTV.
-We therefore consider the sum
+Since GTV provides bounded sensitivity but promotes a different signal model from GLR, another natural alternative is to supplement GLR with GTV, aiming to retain the quadratic graph-smoothness prior while incorporating the bounded-sensitivity property of the $\ell_1$ term.
+We therefore consider
 \begin{equation}
 R_{\mathrm{GLR+GTV}}(\mathbf{u})
 =
@@ -415,12 +411,11 @@ R_{\mathrm{GLR+GTV}}(\mathbf{u})
 \right\|_1.
 \label{eq:glr-gtv}
 \end{equation}
-However, the original quadratic GLR term remains unchanged in this regularizer.
-Consequently, adding the Lipschitz-continuous GTV term does not make the overall regularizer globally Lipschitz continuous, and the unbounded sensitivity inherited from GLR remains.
+However, since the quadratic GLR term remains unchanged, the resulting regularizer still has unbounded sensitivity to large proxy-weighted signal differences, and hence the excessive-penalty issue is not eliminated.
+This provides an illustrative example of the difficulty of achieving robustness through Lipschitz continuity while preserving the quadratic graph-smoothness prior of GLR.
 
-The preceding comparison illustrates the difficulty of simultaneously retaining the quadratic graph-smoothness evaluation of GLR and ensuring bounded sensitivity to perturbations of the edge-domain input.
-The proposed regularizer satisfies the latter through Proposition~\ref{prop:edge-difference-sensitivity}, while Subsection~\ref{subsec:magnitude-adaptive} showed that it retains the GLR evaluation whenever the proxy-weighted signal differences remain within the prescribed threshold.
-The following proposition further shows that this preservation of the GLR penalty is pointwise maximal under the corresponding Lipschitz constraint.
+As shown in Subsection~\ref{subsec:magnitude-adaptive}, the proposed regularizer retains the GLR evaluation for ordinary proxy-weighted signal differences while adaptively moderating the penalty growth for threshold-exceeding components, thereby achieving the global Lipschitz continuity established in Proposition~\ref{prop:edge-difference-sensitivity}.
+The following proposition shows that the edge-domain penalty $\Psi_{\tau}$ associated with the proposed regularizer preserves the original quadratic GLR evaluation as faithfully as possible while satisfying the prescribed Lipschitz constraint.
 
 \begin{proposition}[Largest Lipschitz minorant of GLR]
 \label{prop:largest-lipschitz-minorant}
@@ -472,8 +467,5 @@ where the equality follows from Definition~\ref{def:proposed-regularizer} by set
 This proves \eqref{eq:minorant-relation}.
 \end{IEEEproof}
 
-Proposition~\ref{prop:largest-lipschitz-minorant} shows that, among all $2\tau$-Lipschitz minorants of the quadratic GLR edge-domain penalty, $\Psi_{\tau}$ retains the GLR cost pointwise to the greatest possible extent.
-Thus, the proposed regularizer combines bounded sensitivity with the largest possible pointwise penalty below GLR under the prescribed Lipschitz constraint.
-This optimality concerns the edge-domain function $\Psi_{\tau}$ and does not require every edge-domain vector to be representable as $\sqrt{\mathbf{W}}\mathbf{D}\mathbf{u}$.
-
+In the present graph-regularization setting, this result provides a precise design interpretation of the Huber form in Fact~\ref{fact:huber}: under the prescribed Lipschitz constraint, $\Psi_\tau$ preserves the quadratic GLR edge-domain penalty pointwise as much as possible.
 We include GTV and GLR+GTV in the experiments to evaluate how these different regularization mechanisms affect recovery under proxy-graph inaccuracies.
